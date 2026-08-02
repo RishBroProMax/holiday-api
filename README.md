@@ -1,16 +1,17 @@
-# Sri Lankan Holiday API (v2.5)
+# 🇱🇰 Sri Lankan Holiday API (v2.5)
 
 ![Sri Lankan Holiday API Banner](public/OG.png)
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org/)
 [![Version](https://img.shields.io/badge/Version-v2.5.0-amber.svg)](https://holiday.imrishmika.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Security](https://img.shields.io/badge/DDoS-Protected-emerald.svg)](https://holiday.imrishmika.dev)
 [![Deploy with Vercel](https://img.shields.io/badge/Deploy-Vercel-black.svg)](https://vercel.com)
 [![Live Site](https://img.shields.io/badge/Live-holiday.imrishmika.dev-007A3D.svg)](https://holiday.imrishmika.dev)
 
 A fast, free, open-source REST API & Interactive Web Dashboard serving comprehensive Sri Lankan public, bank, and Poya holiday data for **2024 through 2045** (22 years).
 
-Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **OpenAPI 3.0 (Swagger UI)**. Deploys seamlessly to Vercel.
+Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **OpenAPI 3.0 (Swagger UI)**. Deploys seamlessly to Vercel with built-in DDoS protection and security middleware.
 
 ---
 
@@ -29,11 +30,12 @@ Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **
 - 🌕 **Astronomically Computed Poya Days**: Full Moon Poya dates calculated using the Jean Meeus lunar algorithm for Sri Lanka standard time (`Asia/Colombo`).
 - 🕉️☪️✝️☸️ **Multi-Religious & National Coverage**: Buddhist, Hindu, Islamic, Christian, National, and International observances.
 - ⚡ **Next.js Serverless Native**: Ultra-fast responses via Vercel Edge CDN.
+- 🛡️ **DDoS Protection & Rate Limiting**: Built-in edge sliding-window rate limiter (60 req/min per IP) and production HTTP security headers (`HSTS`, `X-Frame-Options`, `X-Content-Type-Options`).
 - 🔍 **Search & Filter Explorer**: Filter by year (2024-2045), month, holiday type, category, or keyword search directly from the web interface.
 - 💻 **Live API Playground & Code Generator**: Test endpoints live in browser and copy integration code for **Next.js**, **React**, **Vue 3**, **Vite**, **Node.js**, **Python**, **cURL**, **PHP**, **Go**, **Java**, and **Flutter / Dart**.
 - ⏱️ **Live Ticking Countdown Timer**: Real-time ticking countdown to the next upcoming holiday.
 - 📥 **Dataset Export**: One-click download buttons for full dataset in **JSON** or **CSV** format.
-- 🛡️ **Production-Ready**: CORS enabled, zero database requirements.
+- 🔓 **100% Open-Source & Free**: CORS enabled, zero database requirements.
 
 ---
 
@@ -91,6 +93,16 @@ curl https://holiday.imrishmika.dev/api/v1/holidays/upcoming
   }
 }
 ```
+
+---
+
+## 🛡️ Security & DDoS Protection
+
+The API includes edge-level security controls:
+- **Rate Limiting**: 60 requests per minute per IP address. Exceeding requests receive `HTTP 429 Too Many Requests`.
+- **HSTS (HTTP Strict Transport Security)**: Enforces TLS/HTTPS connections.
+- **X-Frame-Options**: Set to `DENY` to block Clickjacking attacks.
+- **X-Content-Type-Options**: Set to `nosniff` to prevent MIME-sniffing exploits.
 
 ---
 
