@@ -1,4 +1,4 @@
-# 🇱🇰 Sri Lankan Holiday API (v2.5)
+# Sri Lankan Holiday API (v2.5)
 
 ![Sri Lankan Holiday API Banner](public/OG.png)
 
