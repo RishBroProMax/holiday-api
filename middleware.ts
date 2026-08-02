@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { recordApiRequest } from '@/lib/telemetry';
 
 // In-Memory Rate Limiting Cache for DDoS protection
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -11,12 +12,15 @@ const WINDOW_MS = 60 * 1000; // 1 minute window
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Apply Rate Limiting & Security Headers to all /api/ endpoints
+  // Apply Rate Limiting, Telemetry & Security Headers to all /api/ endpoints
   if (pathname.startsWith('/api')) {
     // Extract IP address from request headers
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
                request.headers.get('x-real-ip') || 
-               'anonymous';
+               '127.0.0.1';
+
+    // Record Telemetry
+    recordApiRequest(ip);
 
     const now = Date.now();
     const userLimit = rateLimitMap.get(ip);

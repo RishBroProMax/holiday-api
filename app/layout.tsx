@@ -1,71 +1,111 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
+export const viewport: Viewport = {
+  themeColor: '#0B0E14',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
-  title: 'Sri Lankan Holiday API v2.5 | Free REST API (2024–2045) | Public, Bank & Poya Days',
-  description: 'Free, fast, open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024–2045. Includes astronomical Poya calculations, JSON/CSV exports, and interactive developer docs.',
+  title: 'Sri Lanka Holiday API (2024–2045) | Public, Bank & Poya Days | Free REST API',
+  description: 'Free, fast, open-source REST API & dataset providing official Sri Lankan public holidays, bank holidays, and Full Moon Poya days (2024–2045). Astronomically computed Poya dates, JSON/CSV exports, OpenAPI 3.0 docs, and instant integration for Next.js, React, Vue, Python, PHP, and Node.js.',
+  applicationName: 'Sri Lankan Holiday API',
+  referrer: 'origin-when-cross-origin',
   keywords: [
     'Sri Lanka Holiday API',
+    'Sri Lankan Holiday API',
     'Sri Lanka Public Holidays 2024 2025 2026',
+    'Sri Lanka Public Holidays API',
     'Full Moon Poya Days API',
     'Poya Day API Sri Lanka',
+    'Poya Day Calendar Sri Lanka',
     'Sri Lanka Bank Holidays API',
     'Sri Lanka Calendar API',
-    'Sinhala Tamil New Year Date API',
+    'Sinhala and Tamil New Year Date API',
     'Sri Lanka Holiday Dataset',
     'Free Holiday API Sri Lanka',
     'Asia Colombo Holiday API',
-    'Vercel Holiday API'
+    'Sri Lanka Holidays JSON',
+    'Sri Lanka Holidays CSV',
+    'Sri Lanka Mercantile Holidays',
+    'Sri Lanka Public Gazette Holidays',
+    'Sri Lanka Holiday Web Service',
+    'Vercel Holiday API',
+    'imrishmika',
+    'RishBroProMax'
   ],
-  authors: [{ name: 'RishBroProMax', url: 'https://github.com/RishBroProMax' }],
+  authors: [
+    { name: 'RishBroProMax', url: 'https://github.com/RishBroProMax' },
+    { name: 'Rishmika', url: 'https://imrishmika.dev' }
+  ],
   creator: 'imrishmika.dev',
   publisher: 'imrishmika.dev',
   metadataBase: new URL('https://holiday.imrishmika.dev'),
   alternates: {
     canonical: 'https://holiday.imrishmika.dev',
+    languages: {
+      'en-LK': 'https://holiday.imrishmika.dev',
+      'x-default': 'https://holiday.imrishmika.dev',
+    },
   },
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/favicon.png', type: 'image/png' },
+    ],
     shortcut: '/favicon.png',
     apple: '/favicon.png',
   },
+  manifest: '/manifest.json',
   openGraph: {
-    title: 'Sri Lankan Holiday API v2.5 | Free REST API (2024–2045)',
-    description: 'Free open-source REST API & Web Explorer serving 850+ Sri Lankan public, bank & Poya holidays (2024–2045). Developer friendly, fast, and free.',
+    title: 'Sri Lanka Holiday API (2024–2045) | Free REST API & Explorer',
+    description: 'Free open-source REST API & Web Explorer serving 858+ Sri Lankan public, bank & Poya holidays (2024–2045). Astronomically calculated Poya days, JSON/CSV exports & interactive docs.',
     url: 'https://holiday.imrishmika.dev',
     siteName: 'Sri Lankan Holiday API',
+    locale: 'en_LK',
+    type: 'website',
     images: [
       {
-        url: '/OG.png',
+        url: 'https://holiday.imrishmika.dev/OG.png',
+        secureUrl: 'https://holiday.imrishmika.dev/OG.png',
         width: 1200,
         height: 630,
-        alt: 'Sri Lankan Holiday API Banner',
+        type: 'image/png',
+        alt: 'Sri Lankan Holiday API Official Banner',
       },
     ],
-    locale: 'en_US',
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sri Lankan Holiday API v2.5 | Free REST API & Explorer',
-    description: 'Free open-source REST API serving 850+ Sri Lankan public & Poya holidays (2024–2045). Built for developers.',
-    images: ['/OG.png'],
+    title: 'Sri Lanka Holiday API (2024–2045) | Free REST API & Explorer',
+    description: 'Free open-source REST API serving 858+ Sri Lankan public & Poya holidays (2024–2045). Developer friendly, fast, and free.',
+    images: ['https://holiday.imrishmika.dev/OG.png'],
     creator: '@imrishmika',
+    site: '@imrishmika',
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
   },
+  formatDetection: {
+    telephone: false,
+    date: false,
+    address: false,
+    email: false,
+  },
 };
 
-// JSON-LD Structured Data for Google Rich Snippets
+// Comprehensive JSON-LD Structured Data Schema for Google Rich Search Results
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -74,11 +114,13 @@ const jsonLd = {
       '@id': 'https://holiday.imrishmika.dev/#website',
       'url': 'https://holiday.imrishmika.dev',
       'name': 'Sri Lankan Holiday API',
-      'description': 'Free open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024-2045.',
+      'description': 'Free open-source REST API & dataset providing Sri Lankan public, bank, and Poya holiday data for 2024-2045.',
+      'inLanguage': 'en-LK',
       'publisher': {
-        '@type': 'Person',
-        'name': 'RishBroProMax',
-        'url': 'https://imrishmika.dev'
+        '@type': 'Organization',
+        'name': 'imrishmika.dev',
+        'url': 'https://imrishmika.dev',
+        'logo': 'https://holiday.imrishmika.dev/favicon.png'
       },
       'potentialAction': {
         '@type': 'SearchAction',
@@ -94,6 +136,7 @@ const jsonLd = {
       'softwareVersion': '2.5.0',
       'operatingSystem': 'All',
       'url': 'https://holiday.imrishmika.dev',
+      'downloadUrl': 'https://holiday.imrishmika.dev/api/v1/holidays/export',
       'author': {
         '@type': 'Person',
         'name': 'RishBroProMax',
@@ -102,14 +145,15 @@ const jsonLd = {
       'offers': {
         '@type': 'Offer',
         'price': '0',
-        'priceCurrency': 'USD'
+        'priceCurrency': 'USD',
+        'availability': 'https://schema.org/InStock'
       }
     },
     {
       '@type': 'Dataset',
       '@id': 'https://holiday.imrishmika.dev/#dataset',
       'name': 'Sri Lankan Public, Bank and Poya Holidays Dataset (2024-2045)',
-      'description': 'Comprehensive dataset of 850+ Sri Lankan public holidays, bank holidays, Full Moon Poya days (astronomically computed), Islamic lunar holidays, Hindu festivals, and Christian observances.',
+      'description': 'Comprehensive dataset of 858+ Sri Lankan public holidays, bank holidays, Full Moon Poya days (astronomically computed), Islamic lunar holidays, Hindu festivals, and Christian observances.',
       'url': 'https://holiday.imrishmika.dev',
       'license': 'https://opensource.org/licenses/MIT',
       'temporalCoverage': '2024/2045',
@@ -127,6 +171,36 @@ const jsonLd = {
           '@type': 'DataDownload',
           'encodingFormat': 'text/csv',
           'contentUrl': 'https://holiday.imrishmika.dev/api/v1/holidays/export?format=csv'
+        }
+      ]
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://holiday.imrishmika.dev/#breadcrumb',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home',
+          'item': 'https://holiday.imrishmika.dev'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': 'API Overview',
+          'item': 'https://holiday.imrishmika.dev/api'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 3,
+          'name': 'Swagger Documentation',
+          'item': 'https://holiday.imrishmika.dev/docs'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 4,
+          'name': 'Dataset Export',
+          'item': 'https://holiday.imrishmika.dev/api/v1/holidays/export'
         }
       ]
     },
@@ -165,6 +239,14 @@ const jsonLd = {
             '@type': 'Answer',
             'text': 'Yes, you can export the full dataset directly in JSON or CSV format from https://holiday.imrishmika.dev/api/v1/holidays/export.'
           }
+        },
+        {
+          '@type': 'Question',
+          'name': 'How do I query upcoming holidays or check if today is a holiday?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Use /api/v1/holidays/upcoming to get the next holiday with a countdown or /api/v1/holidays/today to check today status in Sri Lanka timezone.'
+          }
         }
       ]
     }
@@ -186,7 +268,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
         
-        {/* Inject JSON-LD Structured Data for Search Engines */}
+        {/* Inject JSON-LD Structured Data for Search Engine Rich Snippets */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

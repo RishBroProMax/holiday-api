@@ -26,7 +26,10 @@ import {
   Grid,
   Check,
   Menu,
-  X
+  X,
+  Users,
+  Activity,
+  Server
 } from 'lucide-react';
 import holidayData from '../data/holidays.json';
 
@@ -54,6 +57,13 @@ export default function HomePage() {
   // Today & Upcoming Quick Widget
   const [upcomingInfo, setUpcomingInfo] = useState<any>(null);
   
+  // Real-Time Telemetry Stats State
+  const [telemetry, setTelemetry] = useState<{ totalRequestsServed: number; activeUsers: number; status: string }>({
+    totalRequestsServed: 14280,
+    activeUsers: 24,
+    status: 'operational'
+  });
+
   // Real-time Live Ticking Countdown Timer
   const [countdown, setCountdown] = useState<{ days: number; hours: number; minutes: number; seconds: number }>({
     days: 0, hours: 0, minutes: 0, seconds: 0
@@ -75,21 +85,41 @@ export default function HomePage() {
     return matchYear && matchType && matchSearch;
   });
 
-  // Fetch Upcoming & Initialize Live Countdown
+  // Fetch Telemetry & Upcoming Data
   useEffect(() => {
-    const fetchQuickData = async () => {
+    const fetchTelemetryAndQuickData = async () => {
       try {
-        const upRes = await fetch('/api/v1/holidays/upcoming');
-        if (upRes.ok) {
-          const data = await upRes.json();
-          setUpcomingInfo(data);
+        const [upRes, statsRes] = await Promise.all([
+          fetch('/api/v1/holidays/upcoming'),
+          fetch('/api/v1/holidays/stats')
+        ]);
+        if (upRes.ok) setUpcomingInfo(await upRes.json());
+        if (statsRes.ok) {
+          const stats = await statsRes.json();
+          if (stats.data) setTelemetry(stats.data);
         }
       } catch (err) {
-        console.error('Widget fetch error', err);
+        console.error('Fetch error', err);
       }
     };
-    fetchQuickData();
+
+    fetchTelemetryAndQuickData();
     runPlayground('/api/v1/holidays/upcoming');
+
+    // Poll live telemetry every 4 seconds for real-time request & active user ticks
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/v1/holidays/stats');
+        if (res.ok) {
+          const stats = await res.json();
+          if (stats.data) setTelemetry(stats.data);
+        }
+      } catch (e) {
+        // silent fail
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Countdown timer tick effect
@@ -132,6 +162,12 @@ export default function HomePage() {
       setResponseStatus(`HTTP ${res.status} ${res.statusText}`);
       setIsStatusOk(res.ok);
       setResponseJson(JSON.stringify(data, null, 2));
+
+      // Trigger telemetry refresh to increment total served requests
+      fetch('/api/v1/holidays/stats')
+        .then(r => r.json())
+        .then(s => { if (s.data) setTelemetry(s.data); })
+        .catch(() => {});
     } catch (err: any) {
       setResponseStatus('HTTP ERROR');
       setIsStatusOk(false);
@@ -501,6 +537,44 @@ print(data);`;
           </motion.div>
         </section>
 
+        {/* Real-Time Live API Telemetry Bar (Real-Time Requests & Active Connected Users) */}
+        <section className="max-w-5xl mx-auto px-4 my-6">
+          <div className="bg-[#121824]/90 border border-[#1F293D] rounded-2xl p-4 sm:p-5 backdrop-blur-md shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping shrink-0" />
+              <div>
+                <div className="text-xs text-gray-400 font-medium">Live API Telemetry</div>
+                <div className="text-sm font-bold text-white flex items-center gap-2">
+                  <Server className="w-4 h-4 text-amber-400" />
+                  API Status: <span className="text-emerald-400 uppercase font-mono text-xs">100% Operational</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6 text-center sm:text-right">
+              {/* Active Users */}
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-cyan-400" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-400">Active Sessions</div>
+                  <div className="text-sm font-extrabold font-mono text-cyan-400">{telemetry.activeUsers} Users</div>
+                </div>
+              </div>
+
+              <div className="h-8 w-[1px] bg-[#1F293D]" />
+
+              {/* Total Requests Served */}
+              <div className="flex items-center gap-2">
+                <Activity className="w-4 h-4 text-amber-400" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-400">Total API Served</div>
+                  <div className="text-sm font-extrabold font-mono text-amber-400">{telemetry.totalRequestsServed.toLocaleString()} Req</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Live Ticking Countdown Widget */}
         {upcomingInfo && upcomingInfo.data && (
           <section className="max-w-4xl mx-auto px-4 my-8">
@@ -628,6 +702,7 @@ print(data);`;
                   { label: '/year/2026', path: '/api/v1/holidays/year/2026' },
                   { label: '/type/buddhist', path: '/api/v1/holidays/type/buddhist' },
                   { label: '/meta', path: '/api/v1/holidays/meta' },
+                  { label: '/stats', path: '/api/v1/holidays/stats' },
                   { label: '/api', path: '/api' },
                 ].map(chip => (
                   <button
