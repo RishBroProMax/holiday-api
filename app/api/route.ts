@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   return NextResponse.json({
     name: 'Sri Lankan Holiday API',
-    version: '2.0.0',
+    version: '2.5.0',
     description: 'A free, open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024–2045.',
     website: 'https://holiday.imrishmika.dev',
     documentation: 'https://holiday.imrishmika.dev/docs',

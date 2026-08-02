@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Sri Lankan Holiday API | Free REST API (2024–2045) | Public, Bank & Poya Days',
+  title: 'Sri Lankan Holiday API v2.5 | Free REST API (2024–2045) | Public, Bank & Poya Days',
   description: 'Free, fast, open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024–2045. Includes astronomical Poya calculations, JSON/CSV exports, and interactive developer docs.',
   keywords: [
     'Sri Lanka Holiday API',
@@ -30,16 +30,16 @@ export const metadata: Metadata = {
     apple: '/favicon.png',
   },
   openGraph: {
-    title: 'Sri Lankan Holiday API | Free REST API (2024–2045)',
+    title: 'Sri Lankan Holiday API v2.5 | Free REST API (2024–2045)',
     description: 'Free open-source REST API & Web Explorer serving 850+ Sri Lankan public, bank & Poya holidays (2024–2045). Developer friendly, fast, and free.',
     url: 'https://holiday.imrishmika.dev',
     siteName: 'Sri Lankan Holiday API',
     images: [
       {
-        url: '/favicon.png',
+        url: '/OG.png',
         width: 1200,
-        height: 1200,
-        alt: 'Sri Lankan Holiday API Logo',
+        height: 630,
+        alt: 'Sri Lankan Holiday API Banner',
       },
     ],
     locale: 'en_US',
@@ -47,9 +47,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sri Lankan Holiday API | Free REST API & Explorer',
+    title: 'Sri Lankan Holiday API v2.5 | Free REST API & Explorer',
     description: 'Free open-source REST API serving 850+ Sri Lankan public & Poya holidays (2024–2045). Built for developers.',
-    images: ['/favicon.png'],
+    images: ['/OG.png'],
     creator: '@imrishmika',
   },
   robots: {
@@ -91,6 +91,7 @@ const jsonLd = {
       '@id': 'https://holiday.imrishmika.dev/#software',
       'name': 'Sri Lankan Holiday API',
       'applicationCategory': 'DeveloperApplication',
+      'softwareVersion': '2.5.0',
       'operatingSystem': 'All',
       'url': 'https://holiday.imrishmika.dev',
       'author': {

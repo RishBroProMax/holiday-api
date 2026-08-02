@@ -333,7 +333,7 @@ print(data);`;
                 </span>
                 <span className="text-xs text-amber-400 font-semibold flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  holiday.imrishmika.dev • v2.0.0
+                  holiday.imrishmika.dev • v2.5.0
                 </span>
               </div>
             </Link>

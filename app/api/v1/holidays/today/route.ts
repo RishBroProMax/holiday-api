@@ -11,7 +11,7 @@ export async function GET() {
     count: holidays.length,
     data: holidays,
     meta: {
-      apiVersion: '2.0.0',
+      apiVersion: '2.5.0',
       timezone: 'Asia/Colombo',
       checkedDate: new Date().toISOString()
     }

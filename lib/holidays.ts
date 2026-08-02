@@ -137,7 +137,7 @@ export function successResponse(data: any, meta: Record<string, any> = {}) {
     count,
     data,
     meta: {
-      apiVersion: '2.0.0',
+      apiVersion: '2.5.0',
       timezone: 'Asia/Colombo',
       ...meta
     }

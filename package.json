@@ -1,6 +1,6 @@
 {
   "name": "sri-lankan-holiday-api",
-  "version": "2.0.0",
+  "version": "2.5.0",
   "description": "A public REST API & Web Dashboard serving Sri Lankan public holidays (2024-2045) built with Next.js.",
   "main": "app/page.tsx",
   "scripts": {

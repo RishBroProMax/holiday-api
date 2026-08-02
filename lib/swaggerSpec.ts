@@ -2,7 +2,7 @@ export const swaggerSpec = {
   openapi: '3.0.0',
   info: {
     title: '🇱🇰 Sri Lankan Holiday API',
-    version: '2.0.0',
+    version: '2.5.0',
     description: `
 A free, open-source REST API providing comprehensive Sri Lankan public, bank, and Poya holiday data for **2024–2045** (22 years).
 

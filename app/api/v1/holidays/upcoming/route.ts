@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     count: 1,
     data: holiday,
     meta: {
-      apiVersion: '2.0.0',
+      apiVersion: '2.5.0',
       timezone: 'Asia/Colombo',
       daysUntil,
       checkedDate: todayStr
