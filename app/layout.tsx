@@ -7,11 +7,24 @@ export const metadata: Metadata = {
   keywords: ['Sri Lanka', 'Holiday API', 'Poya Days', 'Public Holidays', 'Bank Holidays', 'REST API', 'Next.js', 'Vercel'],
   authors: [{ name: 'RishBroProMax', url: 'https://github.com/RishBroProMax' }],
   metadataBase: new URL('https://holiday.imrishmika.dev'),
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
   openGraph: {
     title: 'Sri Lankan Holiday API',
     description: 'Free open-source REST API & Web Explorer serving 850+ Sri Lankan public & Poya holidays (2024–2045).',
     url: 'https://holiday.imrishmika.dev',
     siteName: 'Sri Lankan Holiday API',
+    images: [
+      {
+        url: '/favicon.png',
+        width: 1200,
+        height: 1200,
+        alt: 'Sri Lankan Holiday API Logo',
+      },
+    ],
     locale: 'en_US',
     type: 'website',
   },
@@ -19,6 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sri Lankan Holiday API',
     description: 'Free open-source REST API & Web Explorer serving 850+ Sri Lankan public & Poya holidays (2024–2045).',
+    images: ['/favicon.png'],
   },
 };
 
@@ -30,6 +44,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />

@@ -14,7 +14,7 @@ export default function DocsPage() {
       {/* Header Bar */}
       <header className="border-b border-[#1F293D] bg-[#121824] px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <span className="text-2xl">🇱🇰</span>
+          <img src="/favicon.png" alt="Logo" className="w-8 h-8 object-contain rounded-md" />
           <span className="font-bold text-lg text-white">Sri Lankan Holiday API Docs</span>
           <span className="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full font-mono">
             OpenAPI 3.0

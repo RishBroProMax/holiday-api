@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Calendar,
   Code,
@@ -173,7 +174,11 @@ func main() {
         <header className="border-b border-[#1F293D] backdrop-blur-md bg-[#0B0E14]/80 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
-              <span className="text-3xl transition-transform group-hover:scale-110">🇱🇰</span>
+              <img
+                src="/favicon.png"
+                alt="Sri Lankan Holiday API Logo"
+                className="w-10 h-10 object-contain transition-transform group-hover:scale-110 rounded-lg shadow-md"
+              />
               <div>
                 <span className="font-extrabold text-xl tracking-tight text-white block">
                   Sri Lankan Holiday API
@@ -210,8 +215,8 @@ func main() {
 
         {/* Hero Section */}
         <section className="max-w-5xl mx-auto px-4 pt-16 pb-12 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-6">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-6">
+            <img src="/favicon.png" alt="Logo" className="w-5 h-5 object-contain" />
             <span>Open Source • 22-Year Coverage (2024–2045)</span>
           </div>
 
@@ -228,7 +233,7 @@ func main() {
           </p>
 
           {/* Quick API URL Pill */}
-          <div className="inline-flex items-center gap-3 bg-[#121824] border border-[#1F293D] rounded-full px-5 py-2.5 mb-10 text-xs sm:text-sm font-mono text-gray-300">
+          <div className="inline-flex items-center gap-3 bg-[#121824] border border-[#1F293D] rounded-full px-5 py-2.5 mb-10 text-xs sm:text-sm font-mono text-gray-300 shadow-inner">
             <Globe className="w-4 h-4 text-emerald-400" />
             <span>https://holiday.imrishmika.dev/api/v1/holidays</span>
             <button
@@ -263,8 +268,8 @@ func main() {
           <section className="max-w-4xl mx-auto px-4 my-8">
             <div className="bg-[#121824] border border-[#1F293D] rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                  <Clock className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 p-2">
+                  <img src="/favicon.png" alt="Logo" className="w-8 h-8 object-contain" />
                 </div>
                 <div>
                   <div className="text-xs text-amber-400 font-semibold uppercase tracking-wider">Next Upcoming Holiday</div>
@@ -534,8 +539,9 @@ func main() {
         {/* Footer */}
         <footer className="border-t border-[#1F293D] mt-24 py-12 bg-[#0B0E14]">
           <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6 text-sm text-gray-400">
-            <div className="flex items-center gap-2">
-              <span>🇱🇰 Sri Lankan Holiday API</span>
+            <div className="flex items-center gap-3">
+              <img src="/favicon.png" alt="Logo" className="w-6 h-6 object-contain" />
+              <span>Sri Lankan Holiday API</span>
               <span>•</span>
               <span>Created by <a href="https://github.com/RishBroProMax" target="_blank" rel="noreferrer" className="text-amber-400 hover:underline">RishBroProMax</a></span>
             </div>
