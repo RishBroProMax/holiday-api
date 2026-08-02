@@ -29,7 +29,8 @@ import {
   X,
   Users,
   Activity,
-  Server
+  Server,
+  Bot
 } from 'lucide-react';
 import holidayData from '../data/holidays.json';
 
@@ -46,8 +47,8 @@ export default function HomePage() {
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
   const [copiedUrl, setCopiedUrl] = useState<boolean>(false);
 
-  type FrameworkLang = 'nextjs' | 'react-vite' | 'vue-vite' | 'js-fetch' | 'axios' | 'python' | 'curl' | 'php' | 'go' | 'java' | 'flutter';
-  const [activeCodeLang, setActiveCodeLang] = useState<FrameworkLang>('nextjs');
+  type FrameworkLang = 'ai-prompt' | 'nextjs' | 'react-vite' | 'vue-vite' | 'js-fetch' | 'axios' | 'python' | 'curl' | 'php' | 'go' | 'java' | 'flutter';
+  const [activeCodeLang, setActiveCodeLang] = useState<FrameworkLang>('ai-prompt');
 
   // Explorer State
   const [selectedYear, setSelectedYear] = useState<number>(2026);
@@ -186,6 +187,23 @@ export default function HomePage() {
   const getCodeSnippet = () => {
     const fullUrl = `https://holiday.imrishmika.dev${playgroundUrl}`;
     switch (activeCodeLang) {
+      case 'ai-prompt':
+        return `🤖 MASTER AI SYSTEM PROMPT FOR VIBE CODERS (ChatGPT / Cursor / Claude / Antigravity):
+
+"You are an expert full-stack engineer. Build a Sri Lankan public holiday feature for this app using the official Sri Lankan Holiday API.
+
+API Base URL: https://holiday.imrishmika.dev/api/v1/holidays
+
+API Key: None required (Free Open Source REST API)
+
+Requirements:
+1. Fetch the next upcoming holiday using GET https://holiday.imrishmika.dev/api/v1/holidays/upcoming
+2. Display a live ticking countdown widget to the next Sri Lankan holiday in Asia/Colombo timezone (UTC+5:30).
+3. Check if today is a public holiday using GET https://holiday.imrishmika.dev/api/v1/holidays/today
+4. Allow searching & filtering holidays by year (2024-2045) and type (buddhist, hindu, islamic, christian, national).
+5. Implement graceful error handling, fallback states, and revalidate cache every hour.
+6. Style using Tailwind CSS with glassmorphic cards and badges for public/bank status."`;
+
       case 'nextjs':
         return `// Next.js 14+ (App Router - Server Component)
 import React from 'react';
@@ -464,7 +482,7 @@ print(data);`;
                     className="w-full text-center py-3 rounded-xl text-amber-400 font-bold bg-amber-500/10 border border-amber-500/30 flex items-center justify-center gap-2"
                   >
                     <BookOpen className="w-4 h-4" />
-                    <span>Interactive Swagger Docs (/docs)</span>
+                    <span>Interactive API Docs (/docs)</span>
                   </Link>
                   <a
                     href="https://github.com/RishBroProMax/holiday-api"
@@ -524,7 +542,7 @@ print(data);`;
                 className="w-full sm:w-auto px-7 py-4 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold flex items-center justify-center gap-2.5 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:-translate-y-0.5 transition"
               >
                 <BookOpen className="w-5 h-5" />
-                <span>Interactive Swagger Docs (/docs)</span>
+                <span>Interactive API Docs (/docs)</span>
               </Link>
               <a
                 href="#playground"
@@ -764,7 +782,7 @@ print(data);`;
         {/* Searchable Calendar Explorer */}
         <section id="explorer" className="max-w-6xl mx-auto px-4 my-16">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 flex items-center justify-center gap-2 sm:gap-3">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#ffffff] mb-3 flex items-center justify-center gap-2 sm:gap-3">
               <img src="/favicon.png" alt="Logo" className="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
               Sri Lanka Holiday Calendar Explorer
             </h2>
@@ -872,14 +890,14 @@ print(data);`;
 
         {/* Code Integration Snippets Section */}
         <section id="code" className="max-w-6xl mx-auto px-4 my-16">
-          <div className="bg-[#121824] border border-[#1F293D] rounded-3xl p-5 sm:p-8">
+          <div className="bg-[#121824] border border-[#1F293D] rounded-3xl p-5 sm:p-8 shadow-2xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
                   <Code className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
-                  Code Integration Snippets & Framework Guides
+                  Code Integration Snippets & AI Vibe Coder Prompt
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-400">Production ready integration code for Next.js, React, Vue, Vite, Node, Python, Go & more.</p>
+                <p className="text-xs sm:text-sm text-gray-400">Copy integration code for Next.js, React, Vue, Python, or copy our Master AI Prompt to vibe code with AI!</p>
               </div>
 
               {/* One Click Copy Button */}
@@ -895,6 +913,7 @@ print(data);`;
             {/* Framework & Language Selector Tabs (Touch Scrollable on Mobile) */}
             <div className="flex overflow-x-auto gap-2 mb-6 border-b border-[#1F293D] pb-4 scrollbar-none">
               {[
+                { id: 'ai-prompt', label: '🤖 AI System Prompt (Vibe Coders)', highlight: true },
                 { id: 'nextjs', label: 'Next.js 14+' },
                 { id: 'react-vite', label: 'React + Vite' },
                 { id: 'vue-vite', label: 'Vue 3 + Vite' },
@@ -912,8 +931,12 @@ print(data);`;
                   onClick={() => setActiveCodeLang(tab.id as FrameworkLang)}
                   className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition border ${
                     activeCodeLang === tab.id
-                      ? 'bg-amber-400 text-black border-amber-400 font-bold shadow-md'
-                      : 'bg-[#07090E] border-[#1F293D] text-gray-400 hover:text-white hover:border-gray-600'
+                      ? tab.highlight
+                        ? 'bg-gradient-to-r from-amber-400 to-rose-500 text-black border-transparent font-extrabold shadow-lg'
+                        : 'bg-amber-400 text-black border-amber-400 font-bold shadow-md'
+                      : tab.highlight
+                        ? 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20'
+                        : 'bg-[#07090E] border-[#1F293D] text-gray-400 hover:text-white hover:border-gray-600'
                   }`}
                 >
                   {tab.label}
@@ -984,7 +1007,7 @@ print(data);`;
 
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
               <a href="https://imrishmika.dev" target="_blank" rel="noreferrer" className="hover:text-white transition font-medium">imrishmika.dev</a>
-              <Link href="/docs" className="text-amber-400 hover:underline font-semibold">Swagger Docs (/docs)</Link>
+              <Link href="/docs" className="text-amber-400 hover:underline font-semibold">API Docs (/docs)</Link>
               <a href="https://github.com/RishBroProMax/holiday-api" target="_blank" rel="noreferrer" className="hover:text-white transition">GitHub Repo</a>
             </div>
           </div>

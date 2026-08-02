@@ -9,8 +9,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Sri Lanka Holiday API (2024–2045) | Public, Bank & Poya Days | Free REST API',
-  description: 'Free, fast, open-source REST API & dataset providing official Sri Lankan public holidays, bank holidays, and Full Moon Poya days (2024–2045). Astronomically computed Poya dates, JSON/CSV exports, OpenAPI 3.0 docs, and instant integration for Next.js, React, Vue, Python, PHP, and Node.js.',
+  title: 'Sri Lanka Holiday API',
+  description: 'Free, fast REST API for Sri Lanka public, bank and Poya holidays (2024–2045). Browse live docs, export JSON/CSV, and integrate with Next.js, Python, PHP or Node.',
   applicationName: 'Sri Lankan Holiday API',
   referrer: 'origin-when-cross-origin',
   keywords: [
@@ -267,7 +267,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-        
+
         {/* Inject JSON-LD Structured Data for Search Engine Rich Snippets */}
         <script
           type="application/ld+json"
