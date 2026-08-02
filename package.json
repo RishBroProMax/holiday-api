@@ -1,0 +1,51 @@
+{
+  "name": "sri-lankan-holiday-api",
+  "version": "2.0.0",
+  "description": "A public REST API & Web Dashboard serving Sri Lankan public holidays (2024-2045) built with Next.js.",
+  "main": "app/page.tsx",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "generate": "node scripts/generate-holidays.js"
+  },
+  "keywords": [
+    "sri-lanka",
+    "holidays",
+    "api",
+    "poya",
+    "public-holidays",
+    "rest-api",
+    "nextjs",
+    "vercel"
+  ],
+  "author": "RishBroProMax",
+  "license": "MIT",
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "framer-motion": "^11.2.10",
+    "lucide-react": "^0.395.0",
+    "next": "^14.2.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-react": "^5.17.14",
+    "tailwind-merge": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/node": "^20.14.8",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-react": "^4.18.3",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

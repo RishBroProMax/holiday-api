@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sri Lankan Holiday API | Free REST API (2024–2045)</title>
+  <meta name="description" content="Free, open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024–2045. Built for developers.">
+  <meta name="keywords" content="Sri Lanka, Holiday API, Poya Days, Public Holidays, Bank Holidays, REST API, Vercel, Node.js">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sri Lankan Holiday API">
+  <meta property="og:description" content="Free open-source REST API serving 850+ Sri Lankan public & Poya holidays (2024–2045).">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://holiday.imrishmika.dev">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0B0E14;
+      --bg-card: #121824;
+      --bg-card-hover: #182030;
+      --accent-gold: #FFC107;
+      --accent-maroon: #A91D3A;
+      --accent-green: #10B981;
+      --accent-cyan: #06B6D4;
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --border: #1F293D;
+      --code-bg: #07090E;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Background Glow Effects */
+    .glow-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .glow-1 {
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 193, 7, 0.08) 0%, rgba(0,0,0,0) 70%);
+    }
+    .glow-2 {
+      position: absolute;
+      top: 200px;
+      right: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(169, 29, 58, 0.08) 0%, rgba(0,0,0,0) 70%);
+    }
+
+    /* Header / Nav */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #FFF;
+      text-decoration: none;
+    }
+    .logo span.flag {
+      font-size: 1.6rem;
+    }
+    .logo span.badge {
+      font-size: 0.75rem;
+      background: rgba(255, 193, 7, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+    .btn-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: #FFF;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-github:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-gold);
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1200px;
+      margin: 4rem auto 3rem;
+      padding: 0 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 50%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold) 0%, #D97706 100%);
+      color: #000;
+      font-weight: 700;
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(255, 193, 7, 0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(255, 193, 7, 0.4);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-weight: 600;
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+    }
+
+    /* Stats Banner */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .stat-card .number {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin-bottom: 0.25rem;
+    }
+    .stat-card .label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Main Container (Grid for Playground & Docs) */
+    .main-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    /* Interactive Playground */
+    .playground-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .playground-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .playground-header h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .endpoint-selector {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-chip {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'Fira Code', monospace;
+      transition: all 0.2s;
+    }
+    .btn-chip:hover, .btn-chip.active {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      background: rgba(255, 193, 7, 0.08);
+    }
+
+    .url-box {
+      display: flex;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .url-method {
+      background: var(--accent-green);
+      color: #000;
+      font-weight: 700;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+    }
+    .url-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-family: 'Fira Code', monospace;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+    .btn-send {
+      background: var(--accent-gold);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      padding: 0 1.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-send:hover {
+      background: #E5A900;
+    }
+
+    .response-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      position: relative;
+    }
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .status-badge {
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+    pre {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #D1D5DB;
+      max-height: 380px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* Endpoints Grid */
+    .endpoints-section {
+      margin-top: 3rem;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .endpoints-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+    .endpoint-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .endpoint-card:hover {
+      border-color: rgba(255, 193, 7, 0.4);
+    }
+    .ep-badge {
+      display: inline-block;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+    }
+    .ep-get {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .ep-path {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #FFF;
+      margin-bottom: 0.5rem;
+    }
+    .ep-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      max-width: 1200px;
+      margin: 5rem auto 0;
+      padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: var(--accent-gold);
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.25rem; }
+      header { flex-direction: column; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-container">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header>
+    <a href="/" class="logo">
+      <span class="flag">🇱🇰</span>
+      Sri Lankan Holiday API
+      <span class="badge">v2.0.0</span>
+    </a>
+    <div class="nav-links">
+      <a href="/api">API Base (/api)</a>
+      <a href="#playground">Playground</a>
+      <a href="#endpoints">Endpoints</a>
+      <a href="/docs" target="_blank"><i class="fa-solid fa-book-open"></i> API Docs (/docs)</a>
+      <a href="https://github.com/RishBroProMax/holiday-api" target="_blank" class="btn-github">
+        <i class="fa-brands fa-github"></i> GitHub
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Sri Lankan Public, Bank & Poya Holiday API</h1>
+    <p>A fast, free, open-source REST API serving complete holiday data for Sri Lanka across 22 years (2024–2045). Astronomically calculated Poya days & multi-religious observances.</p>
+    <div class="hero-actions">
+      <a href="/docs" class="btn-primary" target="_blank"><i class="fa-solid fa-code"></i> Interactive Docs (/docs)</a>
+      <a href="#playground" class="btn-secondary"><i class="fa-solid fa-play"></i> Try Live API</a>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="number">850+</div>
+      <div class="label">Holidays Cataloged</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">22 Years</div>
+      <div class="label">Coverage (2024–2045)</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">6 Types</div>
+      <div class="label">Buddhist, Hindu, Islamic, Christian, National, Intl</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">100% Free</div>
+      <div class="label">Open Source (MIT)</div>
+    </div>
+  </div>
+
+  <!-- Main Section: Live Playground -->
+  <div class="main-container" id="playground">
+    <div class="playground-section">
+      <div class="playground-header">
+        <h2>⚡ Live API Playground</h2>
+        <div class="endpoint-selector">
+          <button class="btn-chip active" onclick="setEndpoint('/api/v1/holidays/upcoming')">/upcoming</button>
+          <button class="btn-chip" onclick="setEndpoint('/api/v1/holidays/today')">/today</button>
+          <button class="btn-chip" onclick="setEndpoint('/api/v1/holidays?year=2026')">/year=2026</button>
+          <button class="btn-chip" onclick="setEndpoint('/api/v1/holidays/type/buddhist')">/type/buddhist</button>
+          <button class="btn-chip" onclick="setEndpoint('/api')">/api</button>
+        </div>
+      </div>
+
+      <div class="url-box">
+        <span class="url-method">GET</span>
+        <input type="text" id="urlInput" class="url-input" value="https://holiday.imrishmika.dev/api/v1/holidays/upcoming">
+        <button class="btn-send" onclick="sendRequest()"><i class="fa-solid fa-paper-plane"></i> Send</button>
+      </div>
+
+      <div class="response-container">
+        <div class="response-header">
+          <span>Response JSON</span>
+          <span class="status-badge" id="statusBadge">STATUS: 200 OK</span>
+        </div>
+        <pre id="jsonOutput">Loading demo request...</pre>
+      </div>
+    </div>
+
+    <!-- Endpoints Section -->
+    <div class="endpoints-section" id="endpoints">
+      <h2 class="section-title">📌 Key API Endpoints</h2>
+      <div class="endpoints-grid">
+        
+        <div class="endpoint-card">
+          <span class="ep-badge ep-get">GET</span>
+          <div class="ep-path">/api</div>
+          <div class="ep-desc">Base API overview endpoint returning metadata, version, and list of available endpoint routes.</div>
+        </div>
+
+        <div class="endpoint-card">
+          <span class="ep-badge ep-get">GET</span>
+          <div class="ep-path">/api/v1/holidays</div>
+          <div class="ep-desc">List holidays with query filters: <code>?year=2026</code>, <code>?month=5</code>, <code>?type=buddhist</code>, <code>?public=true</code></div>
+        </div>
+
+        <div class="endpoint-card">
+          <span class="ep-badge ep-get">GET</span>
+          <div class="ep-path">/api/v1/holidays/upcoming</div>
+          <div class="ep-desc">Get the next upcoming holiday from today's date in Asia/Colombo timezone. Includes countdown <code>daysUntil</code>.</div>
+        </div>
+
+        <div class="endpoint-card">
+          <span class="ep-badge ep-get">GET</span>
+          <div class="ep-path">/api/v1/holidays/today</div>
+          <div class="ep-desc">Check if today is a public holiday in Sri Lanka. Returns boolean <code>isHoliday</code>.</div>
+        </div>
+
+        <div class="endpoint-card">
+          <span class="ep-badge ep-get">GET</span>
+          <div class="ep-path">/api/v1/holidays/year/:year</div>
+          <div class="ep-desc">Get all holidays for a specific year (2024 through 2045).</div>
+        </div>
+
+        <div class="endpoint-card">
+          <span class="ep-badge ep-get">GET</span>
+          <div class="ep-path">/api/v1/holidays/date/:date</div>
+          <div class="ep-desc">Check if a specific date (<code>YYYY-MM-DD</code>) is a Sri Lankan holiday.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      Created with ❤️ for Sri Lanka by <a href="https://github.com/RishBroProMax" target="_blank">RishBroProMax</a>
+    </div>
+    <div>
+      Hosted on <a href="https://holiday.imrishmika.dev" target="_blank">holiday.imrishmika.dev</a> • <a href="/docs">Docs (/docs)</a>
+    </div>
+  </footer>
+
+  <script>
+    function setEndpoint(path) {
+      document.querySelectorAll('.btn-chip').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      const origin = window.location.origin;
+      document.getElementById('urlInput').value = `${origin}${path}`;
+      sendRequest();
+    }
+
+    async function sendRequest() {
+      const url = document.getElementById('urlInput').value;
+      const output = document.getElementById('jsonOutput');
+      const badge = document.getElementById('statusBadge');
+      output.textContent = 'Sending request...';
+      
+      try {
+        const res = await fetch(url);
+        badge.textContent = `STATUS: ${res.status} ${res.statusText}`;
+        badge.style.color = res.ok ? '#10B981' : '#EF4444';
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        badge.textContent = 'STATUS: ERROR';
+        badge.style.color = '#EF4444';
+        output.textContent = JSON.stringify({ error: err.message }, null, 2);
+      }
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('urlInput').value = `${window.location.origin}/api/v1/holidays/upcoming`;
+      sendRequest();
+    });
+  </script>
+</body>
+</html>
