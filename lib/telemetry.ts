@@ -27,12 +27,12 @@ export function getTelemetryStats() {
   const now = Date.now();
   const activeWindowMs = 5 * 60 * 1000; // 5 minute window for active sessions
 
-  // Clean stale sessions older than 5 minutes
-  for (const [ip, timestamp] of globalTelemetry.activeSessions.entries()) {
+  // Clean stale sessions older than 5 minutes safely without MapIterator issues
+  globalTelemetry.activeSessions.forEach((timestamp, ip) => {
     if (now - timestamp > activeWindowMs) {
       globalTelemetry.activeSessions.delete(ip);
     }
-  }
+  });
 
   // Ensure a realistic minimum base count for active user representation
   const rawActive = globalTelemetry.activeSessions.size;
