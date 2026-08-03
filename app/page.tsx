@@ -69,7 +69,7 @@ export default function HomePage() {
 
   // Today & Upcoming Quick Widget
   const [upcomingInfo, setUpcomingInfo] = useState<any>(null);
-  
+
   // Real-Time Telemetry Stats State
   const [telemetry, setTelemetry] = useState<{ totalRequestsServed: number; activeUsers: number; status: string }>({
     totalRequestsServed: 14280,
@@ -181,7 +181,7 @@ export default function HomePage() {
       fetch('/api/v1/holidays/stats')
         .then(r => r.json())
         .then(s => { if (s.data) setTelemetry(s.data); })
-        .catch(() => {});
+        .catch(() => { });
     } catch (err: any) {
       setResponseStatus('HTTP ERROR');
       setIsStatusOk(false);
@@ -201,7 +201,7 @@ export default function HomePage() {
     const fullUrl = `https://holiday.imrishmika.dev${playgroundUrl}`;
     switch (activeCodeLang) {
       case 'ai-prompt':
-        return `🤖 MASTER AI SYSTEM PROMPT FOR VIBE CODERS (ChatGPT / Cursor / Claude / Antigravity):
+        return `🤖 MASTER AI SYSTEM PROMPT FOR VIBE CODERS (ChatGPT / Claude / Gemini ):
 
 "You are an expert full-stack engineer. Build a Sri Lankan public holiday feature for this app using the official Sri Lankan Holiday API.
 
@@ -388,7 +388,7 @@ print(data);`;
 
   return (
     <div className="min-h-screen bg-[#06080E] text-[#F3F4F6] selection:bg-amber-400 selection:text-black relative overflow-x-hidden font-sans">
-      
+
       {/* 🌟 Dynamic Ambient Background Lights */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
@@ -444,7 +444,7 @@ print(data);`;
               <a href="#export" className="text-gray-400 hover:text-white transition hover:scale-105">Dataset Export</a>
               <a href="#code" className="text-gray-400 hover:text-white transition hover:scale-105">Code Snippets</a>
               <a href="#faq" className="text-gray-400 hover:text-white transition hover:scale-105">FAQ</a>
-              
+
               <Link
                 href="/docs"
                 className="flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold bg-amber-500/10 border border-amber-500/30 px-4 py-2 rounded-xl transition hover:bg-amber-500/20 shadow-sm"
@@ -452,7 +452,7 @@ print(data);`;
                 <BookOpen className="w-4 h-4" />
                 <span>API Docs (/docs)</span>
               </Link>
-              
+
               <a
                 href="https://github.com/RishBroProMax/holiday-api"
                 target="_blank"
@@ -833,11 +833,10 @@ print(data);`;
                   <button
                     key={chip.path}
                     onClick={() => handleChipClick(chip.path)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-mono transition border ${
-                      playgroundUrl === chip.path
+                    className={`px-3 py-1.5 rounded-xl text-xs font-mono transition border ${playgroundUrl === chip.path
                         ? 'bg-amber-500/10 border-amber-400 text-amber-400 font-bold shadow-md'
                         : 'bg-[#06080E] border-[#1A2333] text-gray-400 hover:text-white hover:border-gray-600'
-                    }`}
+                      }`}
                   >
                     {chip.label}
                   </button>
@@ -972,11 +971,10 @@ print(data);`;
                 <button
                   key={m.label}
                   onClick={() => setSelectedMonth(m.num as any)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
-                    selectedMonth === m.num
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition ${selectedMonth === m.num
                       ? 'bg-amber-400 text-black font-bold shadow-md'
                       : 'bg-[#06080E] text-gray-400 hover:text-white hover:bg-[#121824]'
-                  }`}
+                    }`}
                 >
                   {m.label}
                 </button>
@@ -1001,13 +999,12 @@ print(data);`;
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className={`text-[10px] font-mono font-extrabold uppercase px-3 py-1 rounded-full border ${
-                        holiday.type === 'buddhist' ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' :
-                        holiday.type === 'hindu' ? 'bg-rose-500/10 text-rose-400 border-rose-500/30' :
-                        holiday.type === 'islamic' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
-                        holiday.type === 'christian' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' :
-                        'bg-purple-500/10 text-purple-400 border-purple-500/30'
-                      }`}>
+                      <span className={`text-[10px] font-mono font-extrabold uppercase px-3 py-1 rounded-full border ${holiday.type === 'buddhist' ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' :
+                          holiday.type === 'hindu' ? 'bg-rose-500/10 text-rose-400 border-rose-500/30' :
+                            holiday.type === 'islamic' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
+                              holiday.type === 'christian' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' :
+                                'bg-purple-500/10 text-purple-400 border-purple-500/30'
+                        }`}>
                         {holiday.type}
                       </span>
                       <span className="text-xs text-gray-400 font-mono font-medium">
@@ -1101,15 +1098,14 @@ print(data);`;
                 <button
                   key={tab.id}
                   onClick={() => setActiveCodeLang(tab.id as FrameworkLang)}
-                  className={`px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap transition border ${
-                    activeCodeLang === tab.id
+                  className={`px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap transition border ${activeCodeLang === tab.id
                       ? tab.highlight
                         ? 'bg-gradient-to-r from-amber-400 via-amber-500 to-rose-500 text-black border-transparent font-black shadow-lg'
                         : 'bg-amber-400 text-black border-amber-400 font-bold shadow-md'
                       : tab.highlight
                         ? 'bg-amber-500/10 border-amber-500/40 text-amber-400 hover:bg-amber-500/20 font-bold'
                         : 'bg-[#06080E] border-[#1A2333] text-gray-400 hover:text-white hover:border-gray-600'
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>
