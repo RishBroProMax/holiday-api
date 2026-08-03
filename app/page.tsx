@@ -432,25 +432,32 @@ print(data);`;
                 </span>
                 <span className="text-[10px] sm:text-xs text-amber-400 font-semibold flex items-center gap-1.5 font-mono">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  holiday.imrishmika.dev • v2.5.0
+                  holiday.imrishmika.dev • v3.0.0 Beta
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
+            <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
               <a href="#playground" className="text-gray-400 hover:text-white transition hover:scale-105">Playground</a>
-              <a href="#explorer" className="text-gray-400 hover:text-white transition hover:scale-105">Calendar Explorer</a>
-              <a href="#export" className="text-gray-400 hover:text-white transition hover:scale-105">Dataset Export</a>
-              <a href="#code" className="text-gray-400 hover:text-white transition hover:scale-105">Code Snippets</a>
-              <a href="#faq" className="text-gray-400 hover:text-white transition hover:scale-105">FAQ</a>
+              <a href="#explorer" className="text-gray-400 hover:text-white transition hover:scale-105">Calendar</a>
+              <a href="#export" className="text-gray-400 hover:text-white transition hover:scale-105">Export</a>
+              <a href="#code" className="text-gray-400 hover:text-white transition hover:scale-105">Code</a>
 
               <Link
                 href="/docs"
-                className="flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold bg-amber-500/10 border border-amber-500/30 px-4 py-2 rounded-xl transition hover:bg-amber-500/20 shadow-sm"
+                className="flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold bg-amber-500/10 border border-amber-500/30 px-3.5 py-2 rounded-xl transition hover:bg-amber-500/20 shadow-sm"
               >
                 <BookOpen className="w-4 h-4" />
-                <span>API Docs (/docs)</span>
+                <span>API Docs</span>
+              </Link>
+
+              <Link
+                href="/changelog"
+                className="flex items-center gap-2 text-rose-400 hover:text-rose-300 font-semibold bg-rose-500/10 border border-rose-500/30 px-3.5 py-2 rounded-xl transition hover:bg-rose-500/20 shadow-sm"
+              >
+                <History className="w-4 h-4" />
+                <span>Changelog</span>
               </Link>
 
               <a
