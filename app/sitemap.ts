@@ -60,6 +60,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${baseUrl}/api/v2/holidays/poya`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/api/v2/holidays/next-poya`,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.85,
+    },
+    {
       url: `${baseUrl}/api/v2/holidays/upcoming`,
       lastModified: currentDate,
       changeFrequency: 'daily',
