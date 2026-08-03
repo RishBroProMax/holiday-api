@@ -477,6 +477,15 @@ print(data);`;
                 <span>Changelog</span>
               </Link>
 
+              <button
+                onClick={toggleTheme}
+                className="p-2.5 rounded-xl bg-[#0F1623] border border-[#1A2333] hover:border-amber-400/50 text-amber-400 transition"
+                title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />}
+              </button>
+
               <a
                 href="https://github.com/RishBroProMax/holiday-api"
                 target="_blank"
