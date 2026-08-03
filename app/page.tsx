@@ -68,6 +68,22 @@ export default function HomePage() {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  // Theme Mode (Dark / Light)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('holiday_api_theme');
+    if (saved === 'light' || saved === 'dark') {
+      setTheme(saved);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('holiday_api_theme', next);
+  };
+
   // Today & Upcoming Quick Widget
   const [upcomingInfo, setUpcomingInfo] = useState<any>(null);
 

@@ -55,6 +55,9 @@ const changelogData: ReleaseNote[] = [
         category: 'Features',
         items: [
           'Added GET /api/v2/holidays with search, multi-field filtering, sorting (date_asc, date_desc), and page-based pagination.',
+          'Added GET /api/v2/holidays/poya dedicated endpoint returning official Sri Lanka Full Moon Poya days.',
+          'Added GET /api/v2/holidays/next-poya endpoint returning the immediate next Poya day with live daysUntil countdown.',
+          'Added GET /api/v2/holidays/religion/[religion] filtering holidays by tradition (buddhist, hindu, islamic, christian, national).',
           'Added GET /api/v2/holidays/upcoming with ?limit=N parameter supporting multi-upcoming holiday queries.',
           'Added GET /api/v2/holidays/search for full-text keyword queries.',
           'Added GET /api/v2/holidays/stats for dataset breakdown analytics and real-time telemetry.'
