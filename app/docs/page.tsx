@@ -174,6 +174,86 @@ const docsEndpoints: EndpointDoc[] = [
     }
   },
   {
+    id: 'v2-poyas',
+    version: 'v2',
+    categoryLabel: 'API v2 (3.0 Beta)',
+    method: 'GET',
+    path: '/api/v2/holidays/poya',
+    title: 'Sri Lanka Poya Days Catalog (v2 / v3 Beta)',
+    description: 'Fetch Sri Lanka Full Moon Poya days specifically, with optional year and month filters.',
+    params: [
+      { name: 'year', type: 'integer', required: false, description: 'Filter Poya days by year (e.g. 2026)' },
+      { name: 'month', type: 'integer', required: false, description: 'Filter Poya days by month number (1 to 12)' }
+    ],
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v2/holidays/poya?year=2026',
+    responseExample: {
+      success: true,
+      apiVersion: '3.0.0-beta',
+      count: 13,
+      data: [
+        {
+          id: '2026-08-27-nikini-full-moon-poya-day',
+          name: 'Nikini Full Moon Poya Day',
+          date: '2026-08-27',
+          year: 2026,
+          month: 8,
+          day: 27,
+          dayOfWeek: 'Thursday',
+          type: 'buddhist'
+        }
+      ]
+    }
+  },
+  {
+    id: 'v2-next-poya',
+    version: 'v2',
+    categoryLabel: 'API v2 (3.0 Beta)',
+    method: 'GET',
+    path: '/api/v2/holidays/next-poya',
+    title: 'Next Full Moon Poya Day (v2 / v3 Beta)',
+    description: 'Fetch the immediate next Full Moon Poya Day in Sri Lanka timezone relative to today, including a live daysUntil countdown integer.',
+    params: [],
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v2/holidays/next-poya',
+    responseExample: {
+      success: true,
+      apiVersion: '3.0.0-beta',
+      data: {
+        id: '2026-08-27-nikini-full-moon-poya-day',
+        name: 'Nikini Full Moon Poya Day',
+        date: '2026-08-27',
+        daysUntil: 24
+      }
+    }
+  },
+  {
+    id: 'v2-religion',
+    version: 'v2',
+    categoryLabel: 'API v2 (3.0 Beta)',
+    method: 'GET',
+    path: '/api/v2/holidays/religion/[religion]',
+    title: 'Filter by Religion (v2 / v3 Beta)',
+    description: 'Filter Sri Lanka holidays by religious tradition: buddhist, hindu, islamic, christian, or national.',
+    params: [
+      { name: 'religion', type: 'path string', required: true, description: 'Target religion: buddhist, hindu, islamic, christian, national' },
+      { name: 'year', type: 'query integer', required: false, description: 'Optional year filter' }
+    ],
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v2/holidays/religion/buddhist?year=2026',
+    responseExample: {
+      success: true,
+      apiVersion: '3.0.0-beta',
+      religion: 'buddhist',
+      count: 14,
+      data: [
+        {
+          id: '2026-08-27-nikini-full-moon-poya-day',
+          name: 'Nikini Full Moon Poya Day',
+          date: '2026-08-27',
+          type: 'buddhist'
+        }
+      ]
+    }
+  },
+  {
     id: 'v2-stats',
     version: 'v2',
     categoryLabel: 'API v2 (3.0 Beta)',
