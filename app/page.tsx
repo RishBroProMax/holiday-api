@@ -38,6 +38,7 @@ import {
   ArrowRight,
   Sun,
   Moon,
+  History,
   Feather
 } from 'lucide-react';
 import holidayData from '../data/holidays.json';
@@ -534,6 +535,14 @@ print(data);`;
                   >
                     <BookOpen className="w-4 h-4" />
                     <span>API Documentation (/docs)</span>
+                  </Link>
+                  <Link
+                    href="/changelog"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-3 rounded-xl text-rose-400 font-bold bg-rose-500/10 border border-rose-500/30 flex items-center justify-center gap-2"
+                  >
+                    <History className="w-4 h-4" />
+                    <span>API Changelog (/changelog)</span>
                   </Link>
                   <a
                     href="https://github.com/RishBroProMax/holiday-api"
