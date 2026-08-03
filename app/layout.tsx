@@ -9,7 +9,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Sri Lanka Holiday API',
+  title: 'Sri Lanka Holiday API | Public, Bank & Poya Days | Free REST API',
   description: 'Free, fast REST API for Sri Lanka public, bank and Poya holidays (2024–2045). Browse live docs, export JSON/CSV, and integrate with Next.js, Python, PHP or Node.',
   applicationName: 'Sri Lankan Holiday API',
   referrer: 'origin-when-cross-origin',

@@ -30,7 +30,9 @@ import {
   X,
   Lock,
   Cpu,
-  Info
+  Info,
+  Sliders,
+  Flame
 } from 'lucide-react';
 
 interface EndpointParam {
@@ -42,7 +44,7 @@ interface EndpointParam {
 
 interface EndpointDoc {
   id: string;
-  category: 'getting-started' | 'core' | 'exports' | 'health';
+  version: 'v1' | 'v2';
   categoryLabel: string;
   method: 'GET';
   path: string;
@@ -51,58 +53,39 @@ interface EndpointDoc {
   params?: EndpointParam[];
   exampleUrl: string;
   responseExample: object;
-  errorExamples?: { status: number; title: string; payload: object }[];
 }
 
 const docsEndpoints: EndpointDoc[] = [
   {
-    id: 'overview',
-    category: 'getting-started',
-    categoryLabel: 'Getting Started',
+    id: 'v2-holidays-list',
+    version: 'v2',
+    categoryLabel: 'API v2 (3.0 Beta)',
     method: 'GET',
-    path: '/api',
-    title: 'API Quick Start & Base Endpoint',
-    description: 'The root API endpoint returns complete API directory metadata, version information, base URLs, and active endpoint references.',
-    params: [],
-    exampleUrl: 'https://holiday.imrishmika.dev/api',
-    responseExample: {
-      name: 'Sri Lankan Holiday API',
-      version: '2.5.0',
-      description: 'A free, open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024–2045.',
-      website: 'https://holiday.imrishmika.dev',
-      documentation: 'https://holiday.imrishmika.dev/docs',
-      github: 'https://github.com/RishBroProMax/holiday-api',
-      endpoints: {
-        allHolidays: '/api/v1/holidays',
-        upcoming: '/api/v1/holidays/upcoming',
-        today: '/api/v1/holidays/today',
-        export: '/api/v1/holidays/export',
-        types: '/api/v1/holidays/types',
-        health: '/api/v1/health',
-        telemetryStats: '/api/v1/holidays/stats'
-      }
-    }
-  },
-  {
-    id: 'holidays-list',
-    category: 'core',
-    categoryLabel: 'Core API Endpoints',
-    method: 'GET',
-    path: '/api/v1/holidays',
-    title: 'List All Holidays with Filtering',
-    description: 'Retrieve cataloged Sri Lankan public, bank, and Poya holidays across 2024–2045 (858+ total holidays). Supports filtering by year, month, holiday type, category, or public/bank flags.',
+    path: '/api/v2/holidays',
+    title: 'Advanced Holidays Query (v2 / v3 Beta)',
+    description: 'API v2 / v3 Beta endpoint featuring full-text search, multi-field filtering, sorting (date_asc, date_desc, name_asc), Poya flag, and page-based pagination.',
     params: [
-      { name: 'year', type: 'integer', required: false, description: 'Target year between 2024 and 2045. Example: 2026' },
-      { name: 'month', type: 'integer', required: false, description: 'Target month number (1 to 12). Example: 4' },
-      { name: 'type', type: 'string', required: false, description: 'Filter by holiday religion/type: buddhist, hindu, islamic, christian, national, international.' },
-      { name: 'category', type: 'string', required: false, description: 'Filter by category: public_and_bank, public_only, bank_only.' },
-      { name: 'public', type: 'boolean', required: false, description: 'Set to true to return only public holidays.' },
-      { name: 'bank', type: 'boolean', required: false, description: 'Set to true to return only bank holidays.' }
+      { name: 'search', type: 'query string', required: false, description: 'Full-text search keyword (matches name, description, date)' },
+      { name: 'year', type: 'integer', required: false, description: 'Filter by year (2024 to 2045)' },
+      { name: 'month', type: 'integer', required: false, description: 'Filter by month number (1 to 12)' },
+      { name: 'type', type: 'string', required: false, description: 'Filter by holiday type: buddhist, hindu, islamic, christian, national, international' },
+      { name: 'isPoya', type: 'boolean', required: false, description: 'Set to true to filter only Full Moon Poya days' },
+      { name: 'sort', type: 'string', required: false, description: 'Sort direction: date_asc, date_desc, name_asc, name_desc. Default: date_asc' },
+      { name: 'page', type: 'integer', required: false, description: 'Page number for pagination. Default: 1' },
+      { name: 'limit', type: 'integer', required: false, description: 'Results per page (1 to 200). Default: 50' }
     ],
-    exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays?year=2026&type=buddhist',
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v2/holidays?search=poya&sort=date_asc&limit=10',
     responseExample: {
       success: true,
-      count: 12,
+      apiVersion: '3.0.0-beta',
+      pagination: {
+        total: 12,
+        page: 1,
+        limit: 10,
+        totalPages: 2,
+        hasNextPage: true,
+        hasPrevPage: false
+      },
       data: [
         {
           id: '2026-01-03-duruthu-full-moon-poya-day',
@@ -115,24 +98,161 @@ const docsEndpoints: EndpointDoc[] = [
           type: 'buddhist',
           category: 'public_and_bank',
           isPublicHoliday: true,
-          isBankHoliday: true,
-          description: 'Commemorates the first visit of Lord Buddha to Sri Lanka.'
+          isBankHoliday: true
         }
       ],
       meta: {
-        apiVersion: '2.5.0',
-        timezone: 'Asia/Colombo'
+        timezone: 'Asia/Colombo',
+        filtersApplied: {
+          search: 'poya',
+          sort: 'date_asc'
+        }
       }
     }
   },
   {
-    id: 'upcoming',
-    category: 'core',
-    categoryLabel: 'Core API Endpoints',
+    id: 'v2-upcoming',
+    version: 'v2',
+    categoryLabel: 'API v2 (3.0 Beta)',
+    method: 'GET',
+    path: '/api/v2/holidays/upcoming',
+    title: 'Multi-Upcoming Holidays (v2 / v3 Beta)',
+    description: 'Fetch the next N upcoming holidays from today in Asia/Colombo timezone using the limit parameter.',
+    params: [
+      { name: 'limit', type: 'integer', required: false, description: 'Number of upcoming holidays to return (1 to 20). Default: 1' }
+    ],
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v2/holidays/upcoming?limit=3',
+    responseExample: {
+      success: true,
+      apiVersion: '3.0.0-beta',
+      count: 3,
+      data: [
+        {
+          id: '2026-08-26-milad-un-nabi-holy-prophet-s-birthday',
+          name: "Milad-Un-Nabi (Holy Prophet's Birthday)",
+          date: '2026-08-26',
+          daysUntil: 23
+        },
+        {
+          id: '2026-09-25-binara-full-moon-poya-day',
+          name: 'Binara Full Moon Poya Day',
+          date: '2026-09-25',
+          daysUntil: 53
+        }
+      ],
+      meta: {
+        timezone: 'Asia/Colombo',
+        limitRequested: 3
+      }
+    }
+  },
+  {
+    id: 'v2-search',
+    version: 'v2',
+    categoryLabel: 'API v2 (3.0 Beta)',
+    method: 'GET',
+    path: '/api/v2/holidays/search',
+    title: 'Full-Text Search Endpoint (v2 / v3 Beta)',
+    description: 'Dedicated search endpoint querying holiday names, descriptions, and date strings.',
+    params: [
+      { name: 'q', type: 'query string', required: true, description: 'Search term query string (e.g. poya, new year, april)' }
+    ],
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v2/holidays/search?q=poya',
+    responseExample: {
+      success: true,
+      apiVersion: '3.0.0-beta',
+      query: 'poya',
+      count: 264,
+      data: [
+        {
+          id: '2026-01-03-duruthu-full-moon-poya-day',
+          name: 'Duruthu Full Moon Poya Day',
+          date: '2026-01-03',
+          type: 'buddhist'
+        }
+      ]
+    }
+  },
+  {
+    id: 'v2-stats',
+    version: 'v2',
+    categoryLabel: 'API v2 (3.0 Beta)',
+    method: 'GET',
+    path: '/api/v2/holidays/stats',
+    title: 'Dataset Analytics & System Telemetry (v2 / v3 Beta)',
+    description: 'Retrieve overall dataset distribution statistics broken down by religion, Poya counts, public vs bank flags, and live connected user telemetry.',
+    params: [],
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v2/holidays/stats',
+    responseExample: {
+      success: true,
+      apiVersion: '3.0.0-beta',
+      data: {
+        dataset: {
+          totalHolidays: 858,
+          yearCoverage: '2024–2045',
+          totalYears: 22,
+          publicHolidaysCount: 572,
+          bankHolidaysCount: 572,
+          poyaDaysCount: 264,
+          breakdownByType: {
+            buddhist: 264,
+            national: 132,
+            hindu: 154,
+            islamic: 154,
+            christian: 88,
+            international: 66
+          }
+        },
+        telemetry: {
+          totalRequestsServed: 14360,
+          activeUsers: 24,
+          status: 'operational'
+        }
+      }
+    }
+  },
+  {
+    id: 'v1-holidays-list',
+    version: 'v1',
+    categoryLabel: 'API v1 (Legacy Stable)',
+    method: 'GET',
+    path: '/api/v1/holidays',
+    title: 'List All Holidays (v1 Stable)',
+    description: 'Retrieve cataloged Sri Lankan public, bank, and Poya holidays across 2024–2045 with basic filters.',
+    params: [
+      { name: 'year', type: 'integer', required: false, description: 'Target year between 2024 and 2045' },
+      { name: 'month', type: 'integer', required: false, description: 'Target month number (1 to 12)' },
+      { name: 'type', type: 'string', required: false, description: 'Filter by holiday type: buddhist, hindu, islamic, christian, national' }
+    ],
+    exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays?year=2026',
+    responseExample: {
+      success: true,
+      count: 26,
+      data: [
+        {
+          id: '2026-01-03-duruthu-full-moon-poya-day',
+          name: 'Duruthu Full Moon Poya Day',
+          date: '2026-01-03',
+          year: 2026,
+          month: 1,
+          day: 3,
+          dayOfWeek: 'Saturday',
+          type: 'buddhist',
+          category: 'public_and_bank',
+          isPublicHoliday: true,
+          isBankHoliday: true
+        }
+      ]
+    }
+  },
+  {
+    id: 'v1-upcoming',
+    version: 'v1',
+    categoryLabel: 'API v1 (Legacy Stable)',
     method: 'GET',
     path: '/api/v1/holidays/upcoming',
-    title: 'Get Next Upcoming Holiday',
-    description: 'Returns the single next upcoming Sri Lankan public holiday relative to the current time in Sri Lanka (Asia/Colombo timezone, UTC+5:30), complete with a daysUntil countdown integer.',
+    title: 'Next Single Holiday (v1 Stable)',
+    description: 'Returns the single next upcoming holiday relative to current time in Sri Lanka with countdown integer.',
     params: [],
     exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/upcoming',
     responseExample: {
@@ -142,181 +262,37 @@ const docsEndpoints: EndpointDoc[] = [
         id: '2026-08-26-milad-un-nabi-holy-prophet-s-birthday',
         name: "Milad-Un-Nabi (Holy Prophet's Birthday)",
         date: '2026-08-26',
-        year: 2026,
-        month: 8,
-        day: 26,
-        dayOfWeek: 'Wednesday',
-        type: 'islamic',
-        category: 'public_and_bank',
-        isPublicHoliday: true,
-        isBankHoliday: true,
-        description: "Celebrates the birthday of Prophet Muhammad (PBUH)."
-      },
-      meta: {
-        apiVersion: '2.5.0',
-        timezone: 'Asia/Colombo',
-        daysUntil: 23,
-        checkedDate: '2026-08-03'
+        daysUntil: 23
       }
     }
   },
   {
-    id: 'today',
-    category: 'core',
-    categoryLabel: 'Core API Endpoints',
+    id: 'v1-today',
+    version: 'v1',
+    categoryLabel: 'API v1 (Legacy Stable)',
     method: 'GET',
     path: '/api/v1/holidays/today',
-    title: 'Check Today Holiday Status',
-    description: 'Checks if today (in Asia/Colombo timezone) is an official Sri Lankan public or bank holiday.',
+    title: 'Check Today Status (v1 Stable)',
+    description: 'Checks if today (in Asia/Colombo timezone) is an official Sri Lankan holiday.',
     params: [],
     exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/today',
     responseExample: {
       success: true,
       isHolidayToday: false,
       count: 0,
-      data: [],
-      meta: {
-        apiVersion: '2.5.0',
-        timezone: 'Asia/Colombo',
-        checkedDate: '2026-08-03'
-      }
-    }
-  },
-  {
-    id: 'year',
-    category: 'core',
-    categoryLabel: 'Core API Endpoints',
-    method: 'GET',
-    path: '/api/v1/holidays/year/:year',
-    title: 'Get Holidays by Specific Year',
-    description: 'Returns all cataloged Sri Lankan holidays for any specific year between 2024 and 2045.',
-    params: [
-      { name: 'year', type: 'path integer', required: true, description: 'Target calendar year (e.g. 2026)' }
-    ],
-    exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/year/2026',
-    responseExample: {
-      success: true,
-      year: 2026,
-      count: 26,
-      data: [
-        {
-          id: '2026-04-14-sinhala-and-tamil-new-year-day',
-          name: 'Sinhala & Tamil New Year Day',
-          date: '2026-04-14',
-          year: 2026,
-          month: 4,
-          day: 14,
-          dayOfWeek: 'Tuesday',
-          type: 'national',
-          category: 'public_and_bank',
-          isPublicHoliday: true,
-          isBankHoliday: true
-        }
-      ]
-    }
-  },
-  {
-    id: 'month',
-    category: 'core',
-    categoryLabel: 'Core API Endpoints',
-    method: 'GET',
-    path: '/api/v1/holidays/month/:year/:month',
-    title: 'Get Holidays by Year & Month',
-    description: 'Fetch holidays falling within a specific month of a specific target year.',
-    params: [
-      { name: 'year', type: 'path integer', required: true, description: 'Target year (2024 to 2045)' },
-      { name: 'month', type: 'path integer', required: true, description: 'Target month number (1 to 12)' }
-    ],
-    exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/month/2026/4',
-    responseExample: {
-      success: true,
-      year: 2026,
-      month: 4,
-      count: 3,
-      data: [
-        {
-          id: '2026-04-13-day-prior-to-sinhala-and-tamil-new-year-day',
-          name: 'Day prior to Sinhala & Tamil New Year Day',
-          date: '2026-04-13',
-          year: 2026,
-          month: 4,
-          day: 13,
-          dayOfWeek: 'Monday',
-          type: 'national',
-          category: 'public_and_bank',
-          isPublicHoliday: true,
-          isBankHoliday: true
-        }
-      ]
-    }
-  },
-  {
-    id: 'date',
-    category: 'core',
-    categoryLabel: 'Core API Endpoints',
-    method: 'GET',
-    path: '/api/v1/holidays/date/:date',
-    title: 'Check Specific Date Status',
-    description: 'Query whether any given YYYY-MM-DD date is a Sri Lankan public holiday or Poya day.',
-    params: [
-      { name: 'date', type: 'path string', required: true, description: 'Date string in YYYY-MM-DD format (e.g. 2026-04-14)' }
-    ],
-    exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/date/2026-04-14',
-    responseExample: {
-      success: true,
-      date: '2026-04-14',
-      isHoliday: true,
-      count: 1,
-      data: [
-        {
-          id: '2026-04-14-sinhala-and-tamil-new-year-day',
-          name: 'Sinhala & Tamil New Year Day',
-          date: '2026-04-14',
-          year: 2026,
-          month: 4,
-          day: 14,
-          dayOfWeek: 'Tuesday',
-          type: 'national',
-          category: 'public_and_bank',
-          isPublicHoliday: true,
-          isBankHoliday: true
-        }
-      ]
-    }
-  },
-  {
-    id: 'types',
-    category: 'core',
-    categoryLabel: 'Core API Endpoints',
-    method: 'GET',
-    path: '/api/v1/holidays/types',
-    title: 'List Available Holiday Types',
-    description: 'Returns a list of all holiday religion and observance type categories supported in the system.',
-    params: [],
-    exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/types',
-    responseExample: {
-      success: true,
-      count: 6,
-      data: [
-        { id: 'buddhist', name: 'Buddhist (Full Moon Poya Days)', description: 'Astronomically calculated Poya observances' },
-        { id: 'hindu', name: 'Hindu Festivals', description: 'Deepavali, Thai Pongal, Maha Shivaratri' },
-        { id: 'islamic', name: 'Islamic Observances', description: 'Milad-Un-Nabi, Id-Ul-Fitr, Id-Ul-Alha' },
-        { id: 'christian', name: 'Christian Observances', description: 'Good Friday, Christmas Day' },
-        { id: 'national', name: 'National Holidays', description: 'Independence Day, New Year' },
-        { id: 'international', name: 'International Observances', description: 'May Day (Labor Day)' }
-      ]
+      data: []
     }
   },
   {
     id: 'export',
-    category: 'exports',
+    version: 'v1',
     categoryLabel: 'Data Exports',
     method: 'GET',
     path: '/api/v1/holidays/export',
     title: 'Download Full Dataset (JSON / CSV)',
     description: 'Export all 858+ Sri Lankan public holidays for offline mobile apps, Excel spreadsheets, or database seeding.',
     params: [
-      { name: 'format', type: 'query string', required: false, description: 'Export format: json or csv. Default: json.' }
+      { name: 'format', type: 'query string', required: false, description: 'Export format: json or csv. Default: json' }
     ],
     exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/export?format=csv',
     responseExample: {
@@ -327,12 +303,12 @@ const docsEndpoints: EndpointDoc[] = [
   },
   {
     id: 'health',
-    category: 'health',
+    version: 'v1',
     categoryLabel: 'Telemetry & Diagnostics',
     method: 'GET',
     path: '/api/v1/health',
-    title: 'API System Diagnostics & Health Check',
-    description: 'Comprehensive system diagnostics endpoint returning dataset integrity, active memory stats, uptime, rate limiter status, and telemetry status.',
+    title: 'API System Health & Diagnostics',
+    description: 'Comprehensive system health check returning dataset integrity, active memory stats, uptime, rate limiter status, and telemetry status.',
     params: [],
     exampleUrl: 'https://holiday.imrishmika.dev/api/v1/health',
     responseExample: {
@@ -340,64 +316,21 @@ const docsEndpoints: EndpointDoc[] = [
       statusCode: 200,
       timestamp: '2026-08-03T07:00:00.000Z',
       version: '2.5.0',
-      service: 'Sri Lankan Holiday API',
-      uptime: {
-        seconds: 3600,
-        formatted: '1h 0m 0s'
-      },
+      uptime: { seconds: 3600, formatted: '1h 0m 0s' },
       checks: {
-        dataset: {
-          status: 'healthy',
-          totalHolidaysCount: 858,
-          yearCoverage: '2024–2045 (22 Years)',
-          timezone: 'Asia/Colombo'
-        },
-        telemetry: {
-          status: 'healthy',
-          activeSessions: 24,
-          totalRequestsServed: 14350
-        },
-        rateLimiter: {
-          status: 'healthy',
-          limit: '60 requests / minute',
-          protection: 'Active Edge Sliding Window'
-        },
-        systemMemory: {
-          heapUsedMB: 18.5,
-          heapTotalMB: 42.1,
-          rssMB: 64.2
-        }
-      }
-    }
-  },
-  {
-    id: 'stats',
-    category: 'health',
-    categoryLabel: 'Telemetry & Diagnostics',
-    method: 'GET',
-    path: '/api/v1/holidays/stats',
-    title: 'Real-Time API Telemetry Stats',
-    description: 'Fetch live system metrics including active connected user sessions, total requests served, and uptime.',
-    params: [],
-    exampleUrl: 'https://holiday.imrishmika.dev/api/v1/holidays/stats',
-    responseExample: {
-      success: true,
-      data: {
-        totalRequestsServed: 14352,
-        activeUsers: 24,
-        uptimeSeconds: 3612,
-        status: 'operational',
-        timestamp: '2026-08-03T07:00:12.000Z'
+        dataset: { status: 'healthy', totalHolidaysCount: 858 },
+        telemetry: { activeSessions: 24, totalRequestsServed: 14360 }
       }
     }
   }
 ];
 
 export default function NativeDocsPage() {
-  const [activeEndpointId, setActiveEndpointId] = useState<string>('holidays-list');
+  const [activeEndpointId, setActiveEndpointId] = useState<string>('v2-holidays-list');
   const [searchFilter, setSearchFilter] = useState<string>('');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
+  const [versionFilter, setVersionFilter] = useState<'all' | 'v2' | 'v1'>('all');
 
   // Live Test Playground inside Docs
   const [playgroundOutput, setPlaygroundOutput] = useState<string | null>(null);
@@ -411,6 +344,8 @@ export default function NativeDocsPage() {
 
   // Filtered Endpoints for Sidebar
   const filteredEndpoints = docsEndpoints.filter(e => {
+    const matchVersion = versionFilter === 'all' ? true : e.version === versionFilter;
+    if (!matchVersion) return false;
     if (!searchFilter) return true;
     const q = searchFilter.toLowerCase();
     return e.title.toLowerCase().includes(q) ||
@@ -466,7 +401,7 @@ print(res.json())`;
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0E14] text-[#F3F4F6] selection:bg-amber-400 selection:text-black">
+    <div className="min-h-screen bg-[#06080E] text-[#F3F4F6] selection:bg-amber-400 selection:text-black">
       {/* Animated Background Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute -top-40 -left-40 w-[650px] h-[650px] bg-amber-500/10 rounded-full blur-[170px]" />
@@ -475,21 +410,21 @@ print(res.json())`;
 
       <div className="relative z-10">
         {/* Navigation Header */}
-        <header className="border-b border-[#1F293D] backdrop-blur-xl bg-[#0B0E14]/90 sticky top-0 z-50">
+        <header className="border-b border-[#1A2333] backdrop-blur-xl bg-[#06080E]/90 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
               <img
                 src="/favicon.png"
                 alt="Sri Lankan Holiday API Logo"
-                className="w-10 h-10 object-contain rounded-xl shadow-lg border border-amber-400/20 bg-[#121824] p-1"
+                className="w-10 h-10 object-contain rounded-xl shadow-lg border border-amber-400/20 bg-[#0F1623] p-1"
               />
               <div>
                 <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white block">
                   Sri Lankan Holiday API
                 </span>
-                <span className="text-xs text-amber-400 font-semibold flex items-center gap-1.5">
+                <span className="text-xs text-amber-400 font-semibold flex items-center gap-1.5 font-mono">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Documentation • v2.5.0
+                  Documentation • v3.0.0 Beta (v2 Active)
                 </span>
               </div>
             </Link>
@@ -502,7 +437,7 @@ print(res.json())`;
                 href="https://github.com/RishBroProMax/holiday-api"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 bg-[#121824] border border-[#1F293D] hover:border-amber-400/50 text-white px-4 py-2 rounded-xl transition"
+                className="flex items-center gap-2 bg-[#0F1623] border border-[#1A2333] hover:border-amber-400/50 text-white px-4 py-2 rounded-xl transition"
               >
                 <Github className="w-4 h-4" />
                 <span>GitHub</span>
@@ -512,7 +447,7 @@ print(res.json())`;
             {/* Mobile Sidebar Toggle Button */}
             <button
               onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-              className="lg:hidden p-2 rounded-xl bg-[#121824] border border-[#1F293D] text-gray-300"
+              className="lg:hidden p-2 rounded-xl bg-[#0F1623] border border-[#1A2333] text-gray-300"
               aria-label="Toggle Docs Navigation"
             >
               {mobileDrawerOpen ? <X className="w-6 h-6 text-amber-400" /> : <Menu className="w-6 h-6 text-white" />}
@@ -523,28 +458,28 @@ print(res.json())`;
         {/* Main Portal Workspace */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header Banner */}
-          <div className="bg-[#121824] border border-[#1F293D] rounded-3xl p-6 sm:p-10 mb-8 shadow-2xl relative overflow-hidden">
+          <div className="bg-[#0F1623] border border-[#1A2333] rounded-3xl p-6 sm:p-10 mb-8 shadow-2xl relative overflow-hidden">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-4">
-                <BookOpen className="w-4 h-4" />
-                <span>Official Developer API Reference Portal</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/10 to-rose-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-4">
+                <Flame className="w-4 h-4 text-rose-400 animate-pulse" />
+                <span>Release Candidate: API v2 & v3.0.0-Beta Endpoints Active</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
-                Next.js API Documentation
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3">
+                Next.js API Documentation Portal
               </h1>
               <p className="text-sm sm:text-base text-gray-400 leading-relaxed mb-6">
-                Complete REST API specification covering 858+ Sri Lankan public, bank, and Poya holidays (2024–2045). Free, open-source, zero authentication, CORS enabled with sliding-window DDoS protection.
+                Complete REST specification for 858+ Sri Lankan public, bank, and Poya holidays (2024–2045). Free, open-source, zero authentication required, with built-in CORS and edge rate limiting.
               </p>
 
               <div className="flex flex-wrap gap-3 text-xs font-mono">
-                <span className="bg-[#07090E] border border-[#1F293D] px-3.5 py-2 rounded-xl text-emerald-400 flex items-center gap-2">
+                <span className="bg-[#06080E] border border-[#1A2333] px-3.5 py-2 rounded-xl text-emerald-400 flex items-center gap-2">
                   <Globe className="w-4 h-4" /> https://holiday.imrishmika.dev
                 </span>
-                <span className="bg-[#07090E] border border-[#1F293D] px-3.5 py-2 rounded-xl text-amber-400 flex items-center gap-2">
+                <span className="bg-[#06080E] border border-[#1A2333] px-3.5 py-2 rounded-xl text-amber-400 flex items-center gap-2">
                   <Shield className="w-4 h-4" /> Rate Limit: 60 req / min
                 </span>
-                <span className="bg-[#07090E] border border-[#1F293D] px-3.5 py-2 rounded-xl text-cyan-400 flex items-center gap-2">
-                  <Lock className="w-4 h-4" /> Auth: Public (None)
+                <span className="bg-[#06080E] border border-[#1A2333] px-3.5 py-2 rounded-xl text-rose-400 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" /> Version: v2 & v3-Beta Active
                 </span>
               </div>
             </div>
@@ -554,7 +489,30 @@ print(res.json())`;
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Sidebar Navigation */}
             <div className={`lg:col-span-4 ${mobileDrawerOpen ? 'block' : 'hidden lg:block'}`}>
-              <div className="bg-[#121824] border border-[#1F293D] rounded-3xl p-5 shadow-xl sticky top-28 space-y-4">
+              <div className="bg-[#0F1623] border border-[#1A2333] rounded-3xl p-5 shadow-xl sticky top-28 space-y-4">
+                
+                {/* Version Selector Tabs */}
+                <div className="flex bg-[#06080E] p-1 rounded-xl border border-[#1A2333] text-xs font-mono">
+                  <button
+                    onClick={() => setVersionFilter('all')}
+                    className={`flex-1 py-1.5 rounded-lg font-bold transition ${versionFilter === 'all' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setVersionFilter('v2')}
+                    className={`flex-1 py-1.5 rounded-lg font-bold transition ${versionFilter === 'v2' ? 'bg-rose-500 text-white' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    v2 (v3 Beta)
+                  </button>
+                  <button
+                    onClick={() => setVersionFilter('v1')}
+                    className={`flex-1 py-1.5 rounded-lg font-bold transition ${versionFilter === 'v1' ? 'bg-amber-500/20 text-amber-400' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    v1 (Stable)
+                  </button>
+                </div>
+
                 {/* Search Sidebar Filter */}
                 <div className="relative">
                   <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
@@ -563,12 +521,12 @@ print(res.json())`;
                     placeholder="Search endpoints..."
                     value={searchFilter}
                     onChange={(e) => setSearchFilter(e.target.value)}
-                    className="w-full bg-[#07090E] border border-[#1F293D] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400/50"
+                    className="w-full bg-[#06080E] border border-[#1A2333] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400/50"
                   />
                 </div>
 
                 {/* Endpoint Items List */}
-                <div className="space-y-1.5 max-h-[600px] overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-[580px] overflow-y-auto pr-1">
                   {filteredEndpoints.map((ep) => (
                     <button
                       key={ep.id}
@@ -581,15 +539,15 @@ print(res.json())`;
                       className={`w-full text-left p-3.5 rounded-2xl border transition flex items-center justify-between group ${
                         activeEndpointId === ep.id
                           ? 'bg-amber-500/10 border-amber-400/60 text-white shadow-md'
-                          : 'bg-[#07090E] border-[#1F293D] text-gray-400 hover:text-white hover:border-gray-600'
+                          : 'bg-[#06080E] border-[#1A2333] text-gray-400 hover:text-white hover:border-gray-600'
                       }`}
                     >
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                            {ep.method}
+                          <span className={`text-[9px] font-mono font-extrabold uppercase px-2 py-0.5 rounded ${ep.version === 'v2' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}`}>
+                            {ep.method} {ep.version}
                           </span>
-                          <span className="font-mono text-xs text-white font-semibold truncate max-w-[170px] sm:max-w-[200px]">
+                          <span className="font-mono text-xs text-white font-semibold truncate max-w-[150px]">
                             {ep.path}
                           </span>
                         </div>
@@ -614,15 +572,18 @@ print(res.json())`;
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.25 }}
-                  className="bg-[#121824] border border-[#1F293D] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-8"
+                  className="bg-[#0F1623] border border-[#1A2333] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-8"
                 >
                   {/* Endpoint Header Badge & Path */}
                   <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-xs font-mono font-extrabold uppercase px-3.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    <div className="flex flex-wrap items-center gap-3 mb-3">
+                      <span className="text-xs font-mono font-extrabold uppercase px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                         {activeDoc.method}
                       </span>
-                      <span className="font-mono text-lg sm:text-2xl font-extrabold text-white tracking-tight">
+                      <span className={`text-xs font-mono font-extrabold uppercase px-3 py-1 rounded-xl ${activeDoc.version === 'v2' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}`}>
+                        {activeDoc.version === 'v2' ? 'API v2 / v3 Beta' : 'API v1 Stable'}
+                      </span>
+                      <span className="font-mono text-base sm:text-2xl font-extrabold text-white tracking-tight">
                         {activeDoc.path}
                       </span>
                     </div>
@@ -644,12 +605,12 @@ print(res.json())`;
                       </button>
                     </div>
 
-                    <div className="bg-[#07090E] border border-[#1F293D] rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs sm:text-sm">
+                    <div className="bg-[#06080E] border border-[#1A2333] rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs sm:text-sm">
                       <span className="text-amber-400 truncate w-full sm:w-auto">{activeDoc.exampleUrl}</span>
                       <button
                         onClick={() => testEndpointLive(activeDoc.exampleUrl)}
                         disabled={playgroundLoading}
-                        className="w-full sm:w-auto bg-amber-400 hover:bg-amber-500 text-black font-bold px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-2 transition shrink-0"
+                        className="w-full sm:w-auto bg-amber-400 hover:bg-amber-500 text-black font-bold px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-2 transition shrink-0 shadow-md"
                       >
                         <Play className="w-3.5 h-3.5 fill-black" />
                         <span>{playgroundLoading ? 'Testing...' : 'Test Live'}</span>
@@ -659,8 +620,8 @@ print(res.json())`;
 
                   {/* Live Response Box if Tested */}
                   {playgroundOutput && (
-                    <div className="bg-[#07090E] border border-amber-500/30 rounded-2xl p-4 animate-fadeIn">
-                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#1F293D] text-xs font-mono">
+                    <div className="bg-[#06080E] border border-amber-500/30 rounded-2xl p-4 animate-fadeIn">
+                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#1A2333] text-xs font-mono">
                         <span className="text-amber-400 font-bold flex items-center gap-2">
                           <Activity className="w-4 h-4" /> Live Test Output
                         </span>
@@ -676,9 +637,9 @@ print(res.json())`;
                   {activeDoc.params && activeDoc.params.length > 0 && (
                     <div>
                       <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Parameters Specification</h3>
-                      <div className="overflow-x-auto border border-[#1F293D] rounded-2xl">
+                      <div className="overflow-x-auto border border-[#1A2333] rounded-2xl">
                         <table className="w-full text-left text-xs sm:text-sm">
-                          <thead className="bg-[#07090E] text-gray-400 border-b border-[#1F293D] font-mono">
+                          <thead className="bg-[#06080E] text-gray-400 border-b border-[#1A2333] font-mono">
                             <tr>
                               <th className="p-3.5 font-bold">Parameter</th>
                               <th className="p-3.5 font-bold">Type</th>
@@ -686,9 +647,9 @@ print(res.json())`;
                               <th className="p-3.5 font-bold">Description</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#1F293D]">
+                          <tbody className="divide-y divide-[#1A2333]">
                             {activeDoc.params.map(p => (
-                              <tr key={p.name} className="hover:bg-[#182030]/50 transition">
+                              <tr key={p.name} className="hover:bg-[#121824]/50 transition">
                                 <td className="p-3.5 font-mono text-amber-400 font-bold">{p.name}</td>
                                 <td className="p-3.5 font-mono text-cyan-400">{p.type}</td>
                                 <td className="p-3.5">
@@ -720,7 +681,7 @@ print(res.json())`;
                       </button>
                     </div>
 
-                    <div className="flex gap-2 mb-3 border-b border-[#1F293D] pb-3 overflow-x-auto">
+                    <div className="flex gap-2 mb-3 border-b border-[#1A2333] pb-3 overflow-x-auto">
                       {[
                         { id: 'fetch', label: 'JS Fetch' },
                         { id: 'nextjs', label: 'Next.js 14+' },
@@ -733,7 +694,7 @@ print(res.json())`;
                           className={`px-3 py-1.5 rounded-xl text-xs font-semibold font-mono transition ${
                             activeCodeTab === t.id
                               ? 'bg-amber-400 text-black font-bold'
-                              : 'bg-[#07090E] text-gray-400 hover:text-white'
+                              : 'bg-[#06080E] text-gray-400 hover:text-white'
                           }`}
                         >
                           {t.label}
@@ -741,7 +702,7 @@ print(res.json())`;
                       ))}
                     </div>
 
-                    <div className="bg-[#07090E] border border-[#1F293D] rounded-2xl p-4">
+                    <div className="bg-[#06080E] border border-[#1A2333] rounded-2xl p-4">
                       <pre className="font-mono text-xs sm:text-sm text-amber-300 overflow-x-auto leading-relaxed">
                         {getCodeForTab()}
                       </pre>
@@ -763,7 +724,7 @@ print(res.json())`;
                       </button>
                     </div>
 
-                    <div className="bg-[#07090E] border border-[#1F293D] rounded-2xl p-4">
+                    <div className="bg-[#06080E] border border-[#1A2333] rounded-2xl p-4">
                       <pre className="font-mono text-xs sm:text-sm text-gray-300 overflow-x-auto max-h-[350px] leading-relaxed">
                         {JSON.stringify(activeDoc.responseExample, null, 2)}
                       </pre>
@@ -776,7 +737,7 @@ print(res.json())`;
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-[#1F293D] mt-24 py-10 bg-[#0B0E14]">
+        <footer className="border-t border-[#1A2333] mt-24 py-10 bg-[#06080E]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs sm:text-sm text-gray-400 text-center md:text-left">
             <div className="flex items-center gap-2.5">
               <img src="/favicon.png" alt="Logo" className="w-6 h-6 object-contain rounded-md" />
