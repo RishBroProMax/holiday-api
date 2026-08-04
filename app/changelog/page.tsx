@@ -173,45 +173,47 @@ export default function ChangelogPage() {
 
       <div className="relative z-10">
         {/* Navigation Bar */}
-        <header className="border-b border-[#1A2333] backdrop-blur-xl bg-[#06080E]/90 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <header className="border-b border-[#141B28] backdrop-blur-xl bg-[#06080E]/80 sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
               <img
                 src="/favicon.png"
                 alt="Sri Lankan Holiday API Logo"
-                className="w-10 h-10 object-contain rounded-xl shadow-lg border border-amber-400/20 bg-[#0F1623] p-1"
+                className="w-8 h-8 object-contain rounded-lg border border-amber-400/30 bg-[#0F1623] p-0.5 shadow-md"
               />
-              <div>
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white block">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-base tracking-tight text-white group-hover:text-amber-400 transition">
                   Sri Lankan Holiday API
                 </span>
-                <span className="text-xs text-amber-400 font-semibold flex items-center gap-1.5 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Official API Changelog
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-rose-400/10 text-rose-400 border border-rose-400/30">
+                  Changelog
                 </span>
               </div>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6 text-xs sm:text-sm font-semibold">
+            <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold tracking-wide">
               <Link href="/" className="text-gray-400 hover:text-white transition">
                 Home
               </Link>
-              <Link href="/docs" className="text-gray-400 hover:text-white transition">
-                Docs
+              <Link href="/docs" className="text-gray-400 hover:text-amber-400 transition flex items-center gap-1.5">
+                <span>Docs</span>
               </Link>
-              <Link href="/npm-module" className="text-gray-400 hover:text-white transition">
-                NPM Package
+              <Link href="/npm-module" className="text-gray-400 hover:text-emerald-400 transition flex items-center gap-1.5">
+                <span>NPM Module</span>
               </Link>
-              <Link href="/changelog" className="text-amber-400 font-bold border-b-2 border-amber-400 pb-0.5">
+              <Link href="/changelog" className="text-rose-400 font-bold border-b-2 border-rose-400 pb-0.5">
                 Changelog
               </Link>
+
+              <div className="h-4 w-px bg-[#1F293D] mx-1" />
+
               <a
                 href="https://github.com/RishBroProMax/holiday-api"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 bg-[#0F1623] border border-[#1A2333] hover:border-amber-400/50 text-white px-4 py-2 rounded-xl transition"
+                className="flex items-center gap-1.5 bg-[#0F1623] border border-[#1A2536] hover:border-amber-400/40 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition"
               >
-                <Github className="w-4 h-4" />
+                <Github className="w-3.5 h-3.5 text-gray-300" />
                 <span>GitHub</span>
               </a>
             </nav>

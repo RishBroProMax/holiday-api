@@ -432,87 +432,74 @@ print(data);`;
         <div className="h-1 w-full bg-gradient-to-r from-[#8D153A] via-[#FFBE29] to-[#007A3D]" />
 
         {/* 📌 Header Navigation */}
-        <header className="border-b border-[#1A2333]/80 backdrop-blur-2xl bg-[#06080E]/85 sticky top-0 z-50 transition-all">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3 sm:gap-4 group">
-              <div className="relative">
-                <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-amber-400 via-rose-500 to-emerald-400 opacity-30 group-hover:opacity-80 blur transition duration-500" />
-                <motion.img
-                  whileHover={{ rotate: 6, scale: 1.08 }}
-                  src="/favicon.png"
-                  alt="Sri Lankan Holiday API Logo"
-                  className="relative w-10 h-10 sm:w-11 sm:h-11 object-contain rounded-xl border border-amber-400/30 bg-[#0F1623] p-1 shadow-xl"
-                />
-              </div>
-              <div>
-                <span className="font-extrabold text-base sm:text-xl tracking-tight text-white block group-hover:text-amber-400 transition">
+        <header className="border-b border-[#141B28] backdrop-blur-xl bg-[#06080E]/80 sticky top-0 z-50 transition-all">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3 group">
+              <img
+                src="/favicon.png"
+                alt="Sri Lankan Holiday API Logo"
+                className="w-8 h-8 object-contain rounded-lg border border-amber-400/30 bg-[#0F1623] p-0.5 shadow-md"
+              />
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-base tracking-tight text-white group-hover:text-amber-400 transition">
                   Sri Lankan Holiday API
                 </span>
-                <span className="text-[10px] sm:text-xs text-amber-400 font-semibold flex items-center gap-1.5 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  holiday.imrishmika.dev • v3.0.0 Beta
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-400/10 text-amber-300 border border-amber-400/30">
+                  v3.0.0
                 </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
-              <a href="#playground" className="text-gray-400 hover:text-white transition hover:scale-105">Playground</a>
-              <a href="#explorer" className="text-gray-400 hover:text-white transition hover:scale-105">Calendar</a>
-              <a href="#export" className="text-gray-400 hover:text-white transition hover:scale-105">Export</a>
-              <a href="#code" className="text-gray-400 hover:text-white transition hover:scale-105">Code</a>
-
-              <Link
-                href="/npm-module"
-                className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl transition hover:bg-emerald-500/20 shadow-sm"
-              >
-                <Package className="w-4 h-4" />
-                <span>NPM Package</span>
+            {/* Compact Minimal Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold tracking-wide">
+              <a href="#explorer" className="text-gray-400 hover:text-white transition">
+                Calendar
+              </a>
+              <Link href="/npm-module" className="text-gray-400 hover:text-emerald-400 transition flex items-center gap-1.5">
+                <Package className="w-3.5 h-3.5 text-emerald-400" />
+                <span>NPM Module</span>
               </Link>
-
-              <Link
-                href="/docs"
-                className="flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold bg-amber-500/10 border border-amber-500/30 px-3.5 py-2 rounded-xl transition hover:bg-amber-500/20 shadow-sm"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>API Docs</span>
+              <Link href="/docs" className="text-gray-400 hover:text-amber-400 transition flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+                <span>Docs</span>
               </Link>
-
-              <Link
-                href="/changelog"
-                className="flex items-center gap-2 text-rose-400 hover:text-rose-300 font-semibold bg-rose-500/10 border border-rose-500/30 px-3.5 py-2 rounded-xl transition hover:bg-rose-500/20 shadow-sm"
-              >
-                <History className="w-4 h-4" />
+              <Link href="/changelog" className="text-gray-400 hover:text-rose-400 transition flex items-center gap-1.5">
+                <History className="w-3.5 h-3.5 text-rose-400" />
                 <span>Changelog</span>
               </Link>
 
-              <button
-                onClick={toggleTheme}
-                className="p-2.5 rounded-xl bg-[#0F1623] border border-[#1A2333] hover:border-amber-400/50 text-amber-400 transition"
-                title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                aria-label="Toggle Theme"
-              >
-                {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />}
-              </button>
+              <div className="h-4 w-px bg-[#1F293D] mx-1" />
 
-              <a
-                href="https://github.com/RishBroProMax/holiday-api"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 bg-[#0F1623] border border-[#1A2333] hover:border-amber-400/50 text-white px-4 py-2 rounded-xl font-semibold transition hover:bg-[#151F30]"
-              >
-                <Github className="w-4 h-4" />
-                <span>GitHub</span>
-              </a>
+              {/* Action Buttons Group */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={toggleTheme}
+                  className="p-1.5 rounded-lg bg-[#0F1623] border border-[#1A2536] text-amber-400 hover:text-amber-300 hover:border-amber-400/40 transition"
+                  title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+                  aria-label="Toggle Theme"
+                >
+                  {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-400" />}
+                </button>
+
+                <a
+                  href="https://github.com/RishBroProMax/holiday-api"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 bg-[#0F1623] border border-[#1A2536] hover:border-amber-400/40 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition"
+                >
+                  <Github className="w-3.5 h-3.5 text-gray-300" />
+                  <span>GitHub</span>
+                </a>
+              </div>
             </nav>
 
             {/* Mobile Hamburger Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2.5 rounded-xl bg-[#0F1623] border border-[#1A2333] text-gray-300 hover:text-white focus:outline-none"
+              className="lg:hidden p-2 rounded-xl bg-[#0F1623] border border-[#1A2333] text-gray-300 hover:text-white focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-amber-400" /> : <Menu className="w-6 h-6 text-white" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 text-amber-400" /> : <Menu className="w-5 h-5 text-white" />}
             </button>
           </div>
 
