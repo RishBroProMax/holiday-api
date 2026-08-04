@@ -4,7 +4,7 @@ export async function GET() {
   return NextResponse.json({
     name: 'Sri Lankan Holiday API',
     version: '3.0.0-beta (v2 active)',
-    description: 'A free, open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024–2030.',
+    description: 'A free, open-source REST API providing Sri Lankan public, bank, and Poya holiday data for 2024–2035.',
     website: 'https://holiday.imrishmika.dev',
     documentation: 'https://holiday.imrishmika.dev/docs',
     changelog: 'https://holiday.imrishmika.dev/changelog',

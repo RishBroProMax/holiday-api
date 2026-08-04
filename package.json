@@ -1,6 +1,6 @@
 {
   "name": "sri-lankan-holiday-api",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Official Node.js module & REST API for Sri Lankan public, bank & Poya holidays (2024-2045). Zero-dependency, 100% offline-ready TypeScript/JavaScript SDK.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

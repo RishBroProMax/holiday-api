@@ -400,7 +400,7 @@ const docsEndpoints: EndpointDoc[] = [
       version: '2.5.0',
       uptime: { seconds: 3600, formatted: '1h 0m 0s' },
       checks: {
-        dataset: { status: 'healthy', totalHolidaysCount: 858 },
+        dataset: { status: 'healthy', totalHolidaysCount: 300 },
         telemetry: { activeSessions: 24, totalRequestsServed: 14360 }
       }
     }
@@ -412,7 +412,7 @@ export default function NativeDocsPage() {
   const [searchFilter, setSearchFilter] = useState<string>('');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
-  const [versionFilter, setVersionFilter] = useState<'all' | 'v2' | 'v1'>('all');
+  const [versionFilter, setVersionFilter] = useState<'all' | 'v2' | 'v1' | 'npm'>('all');
 
   // Live Test Playground inside Docs
   const [playgroundOutput, setPlaygroundOutput] = useState<string | null>(null);
@@ -426,7 +426,7 @@ export default function NativeDocsPage() {
 
   // Filtered Endpoints for Sidebar
   const filteredEndpoints = docsEndpoints.filter(e => {
-    const matchVersion = versionFilter === 'all' ? true : e.version === versionFilter;
+    const matchVersion = versionFilter === 'all' || versionFilter === 'npm' ? true : e.version === versionFilter;
     if (!matchVersion) return false;
     if (!searchFilter) return true;
     const q = searchFilter.toLowerCase();
@@ -560,20 +560,48 @@ print(res.json())`;
                 Next.js API Documentation Portal
               </h1>
               <p className="text-sm sm:text-base text-gray-400 leading-relaxed mb-6">
-                Complete REST specification for 858+ Sri Lankan public, bank, and Poya holidays (2024–2045). Free, open-source, zero authentication required, with built-in CORS and edge rate limiting.
+                Complete REST API specification & Node.js Module SDK documentation for 300+ Sri Lankan public, bank, and Poya holidays (2024–2035). Free, open-source, zero authentication required.
               </p>
 
               <div className="flex flex-wrap gap-3 text-xs font-mono">
                 <span className="bg-[#06080E] border border-[#1A2333] px-3.5 py-2 rounded-xl text-emerald-400 flex items-center gap-2">
                   <Globe className="w-4 h-4" /> https://holiday.imrishmika.dev
                 </span>
+                <span className="bg-[#06080E] border border-emerald-500/30 px-3.5 py-2 rounded-xl text-emerald-300 flex items-center gap-2">
+                  <Package className="w-4 h-4 text-emerald-400" /> npm i sri-lankan-holiday-api
+                </span>
                 <span className="bg-[#06080E] border border-[#1A2333] px-3.5 py-2 rounded-xl text-amber-400 flex items-center gap-2">
                   <Shield className="w-4 h-4" /> Rate Limit: 60 req / min
                 </span>
-                <span className="bg-[#06080E] border border-[#1A2333] px-3.5 py-2 rounded-xl text-rose-400 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" /> Version: v2 & v3-Beta Active
-                </span>
               </div>
+            </div>
+          </div>
+
+          {/* Quick Node.js Module Banner */}
+          <div className="bg-[#0F1623] border border-emerald-500/30 rounded-3xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                <Package className="w-6 h-6 text-emerald-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  Official Node.js Module (sri-lankan-holiday-api)
+                  <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">v3.0.0</span>
+                </h3>
+                <p className="text-xs text-gray-400">100% offline-ready TypeScript SDK with 28 helper methods for zero-latency local queries.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
+              <div className="bg-[#06080E] border border-[#1A2333] px-3.5 py-2 rounded-xl font-mono text-xs text-emerald-400 font-bold">
+                npm i sri-lankan-holiday-api
+              </div>
+              <Link
+                href="/npm-module"
+                className="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 transition"
+              >
+                <span>NPM Playground</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
 
@@ -602,6 +630,12 @@ print(res.json())`;
                     className={`flex-1 py-1.5 rounded-lg font-bold transition ${versionFilter === 'v1' ? 'bg-amber-500/20 text-amber-400' : 'text-gray-400 hover:text-white'}`}
                   >
                     v1 (Stable)
+                  </button>
+                  <button
+                    onClick={() => setVersionFilter('npm')}
+                    className={`flex-1 py-1.5 rounded-lg font-bold transition ${versionFilter === 'npm' ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    NPM SDK
                   </button>
                 </div>
 
