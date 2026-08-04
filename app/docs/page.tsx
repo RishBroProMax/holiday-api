@@ -34,7 +34,8 @@ import {
   Sliders,
   Flame,
   Package,
-  History
+  History,
+  Bug
 } from 'lucide-react';
 
 interface EndpointParam {
@@ -521,6 +522,10 @@ print(res.json())`;
               <Link href="/changelog" className="text-gray-400 hover:text-rose-400 transition flex items-center gap-1.5">
                 <History className="w-3.5 h-3.5 text-rose-400" />
                 <span>Changelog</span>
+              </Link>
+              <Link href="/report" className="text-gray-400 hover:text-rose-400 transition flex items-center gap-1.5">
+                <Bug className="w-3.5 h-3.5 text-rose-400" />
+                <span>Report Bug</span>
               </Link>
 
               <div className="h-4 w-px bg-[#1F293D] mx-1" />
