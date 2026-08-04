@@ -2,7 +2,7 @@
 export const holidayData = {
   "meta": {
     "version": "3.0.0-beta",
-    "generated": "2026-08-04T03:19:26.260Z",
+    "generated": "2026-08-04T03:24:13.812Z",
     "source": "Verified Sri Lanka Government Gazette Datasets (100% Hand-Researched Official Data)",
     "totalHolidays": 300,
     "startYear": 2024,
