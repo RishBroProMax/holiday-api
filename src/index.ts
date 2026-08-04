@@ -32,6 +32,12 @@ export interface ClientOptions {
   timeout?: number;
 }
 
+export interface LongWeekend {
+  holiday: Holiday;
+  dates: string[];
+  dayCount: number;
+}
+
 export const VALID_TYPES = ['buddhist', 'hindu', 'islamic', 'christian', 'national', 'international', 'multi'];
 export const VALID_CATEGORIES = ['public_and_bank', 'public', 'bank', 'observance'];
 export const SUPPORTED_YEARS = Array.from(new Set(holidayData.holidays.map((h: any) => h.year))).sort((a, b) => a - b);
@@ -143,6 +149,128 @@ export function isPoyaDay(dateStr: string): boolean {
 }
 
 /**
+ * Check if a date (YYYY-MM-DD) is a business working day in Sri Lanka
+ * (Returns false for Saturdays, Sundays, and Public Holidays)
+ */
+export function isWorkingDay(dateStr: string): boolean {
+  const formatted = dateStr.trim();
+  const dateObj = new Date(formatted + 'T00:00:00');
+  if (isNaN(dateObj.getTime())) return false;
+  const dayOfWeek = dateObj.getDay();
+  if (dayOfWeek === 0 || dayOfWeek === 6) return false;
+  return !isPublicHoliday(formatted);
+}
+
+/**
+ * Get all holidays falling between two dates (inclusive)
+ */
+export function getHolidaysInRange(startDateStr: string, endDateStr: string, filters: FilterOptions = {}): Holiday[] {
+  const start = startDateStr.trim();
+  const end = endDateStr.trim();
+  const allFiltered = getAllHolidays(filters);
+  return allFiltered.filter(h => h.date >= start && h.date <= end).sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/**
+ * Count total business working days between two dates (inclusive)
+ * (Excludes Saturdays, Sundays, and Sri Lankan Public Holidays)
+ */
+export function countWorkingDays(startDateStr: string, endDateStr: string): number {
+  const start = new Date(startDateStr.trim() + 'T00:00:00');
+  const end = new Date(endDateStr.trim() + 'T00:00:00');
+  if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) return 0;
+
+  let count = 0;
+  const current = new Date(start);
+  while (current <= end) {
+    const year = current.getFullYear();
+    const month = String(current.getMonth() + 1).padStart(2, '0');
+    const day = String(current.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    if (isWorkingDay(dateStr)) {
+      count++;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return count;
+}
+
+function formatYMD(d: Date): string {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Find all long weekend opportunities for a target year (or all years if omitted)
+ */
+export function getLongWeekends(year?: number | string): LongWeekend[] {
+  const holidays = getAllHolidays({ year, publicOnly: true });
+  const results: LongWeekend[] = [];
+
+  for (const h of holidays) {
+    const hDate = new Date(h.date + 'T00:00:00');
+    const dayOfWeek = hDate.getDay(); // 1 = Monday, 5 = Friday
+
+    if (dayOfWeek === 1) { // Monday -> Long weekend (Sat, Sun, Mon)
+      const sat = new Date(hDate); sat.setDate(sat.getDate() - 2);
+      const sun = new Date(hDate); sun.setDate(sun.getDate() - 1);
+      results.push({
+        holiday: h,
+        dates: [formatYMD(sat), formatYMD(sun), h.date],
+        dayCount: 3
+      });
+    } else if (dayOfWeek === 5) { // Friday -> Long weekend (Fri, Sat, Sun)
+      const sat = new Date(hDate); sat.setDate(sat.getDate() + 1);
+      const sun = new Date(hDate); sun.setDate(sun.getDate() + 2);
+      results.push({
+        holiday: h,
+        dates: [h.date, formatYMD(sat), formatYMD(sun)],
+        dayCount: 3
+      });
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Get all Buddhist holidays / Poya days for a year
+ */
+export function getBuddhistHolidays(year?: number | string): Holiday[] {
+  return getAllHolidays({ year, religion: 'buddhist' });
+}
+
+/**
+ * Get all Hindu holidays / festivals for a year
+ */
+export function getHinduHolidays(year?: number | string): Holiday[] {
+  return getAllHolidays({ year, religion: 'hindu' });
+}
+
+/**
+ * Get all Islamic holidays for a year
+ */
+export function getIslamicHolidays(year?: number | string): Holiday[] {
+  return getAllHolidays({ year, religion: 'islamic' });
+}
+
+/**
+ * Get all Christian holidays for a year
+ */
+export function getChristianHolidays(year?: number | string): Holiday[] {
+  return getAllHolidays({ year, religion: 'christian' });
+}
+
+/**
+ * Get all National holidays for a year
+ */
+export function getNationalHolidays(year?: number | string): Holiday[] {
+  return getAllHolidays({ year, religion: 'national' });
+}
+
+/**
  * Helper to get today's date in Asia/Colombo timezone (YYYY-MM-DD)
  */
 function getSriLankaTodayString(): string {
@@ -214,8 +342,8 @@ export function getNextPoyaDay(): (Holiday & { daysUntil: number }) | null {
   if (poyaDays.length === 0) return null;
 
   const nextPoya = poyaDays[0];
-  const todayDate = new Date(todayStr);
-  const poyaDate = new Date(nextPoya.date);
+  const todayDate = new Date(todayStr + 'T00:00:00');
+  const poyaDate = new Date(nextPoya.date + 'T00:00:00');
   const diffTime = Math.abs(poyaDate.getTime() - todayDate.getTime());
   const daysUntil = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -223,6 +351,26 @@ export function getNextPoyaDay(): (Holiday & { daysUntil: number }) | null {
     ...nextPoya,
     daysUntil
   };
+}
+
+/**
+ * Calculate days remaining until a target date (YYYY-MM-DD) from today in Sri Lanka
+ */
+export function getDaysUntil(dateStr: string): number {
+  const todayStr = getSriLankaTodayString();
+  const today = new Date(todayStr + 'T00:00:00');
+  const target = new Date(dateStr.trim() + 'T00:00:00');
+  const diffTime = target.getTime() - today.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * Lookup a specific holiday by exact ID string
+ */
+export function getHolidayById(id: string): Holiday | null {
+  const targetId = id.trim().toLowerCase();
+  const found = (holidayData.holidays as Holiday[]).find(h => h.id.toLowerCase() === targetId);
+  return found || null;
 }
 
 /**
@@ -251,6 +399,35 @@ export function searchHolidays(query: string): Holiday[] {
  */
 export function getMetadata() {
   return holidayData.meta;
+}
+
+/**
+ * Get dataset analytical breakdown statistics
+ */
+export function getDatasetStats() {
+  const holidays = holidayData.holidays as Holiday[];
+  const totalHolidays = holidays.length;
+  const publicCount = holidays.filter(h => h.isPublicHoliday).length;
+  const bankCount = holidays.filter(h => h.isBankHoliday).length;
+  const poyaCount = holidays.filter(h => h.name.toLowerCase().includes('poya')).length;
+
+  const breakdownByReligion: Record<string, number> = {};
+  for (const h of holidays) {
+    const r = h.type.toLowerCase();
+    breakdownByReligion[r] = (breakdownByReligion[r] || 0) + 1;
+  }
+
+  return {
+    totalHolidays,
+    supportedYears: SUPPORTED_YEARS,
+    startYear: SUPPORTED_YEARS[0],
+    endYear: SUPPORTED_YEARS[SUPPORTED_YEARS.length - 1],
+    publicCount,
+    bankCount,
+    poyaCount,
+    breakdownByReligion,
+    version: holidayData.meta.version
+  };
 }
 
 /**
@@ -375,7 +552,19 @@ export default {
   isPublicHoliday,
   isBankHoliday,
   isPoyaDay,
+  isWorkingDay,
+  getHolidaysInRange,
+  countWorkingDays,
+  getLongWeekends,
+  getBuddhistHolidays,
+  getHinduHolidays,
+  getIslamicHolidays,
+  getChristianHolidays,
+  getNationalHolidays,
+  getDaysUntil,
+  getHolidayById,
   searchHolidays,
   getMetadata,
+  getDatasetStats,
   SriLankanHolidayAPI
 };

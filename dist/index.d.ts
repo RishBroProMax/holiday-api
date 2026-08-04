@@ -27,6 +27,11 @@ export interface ClientOptions {
     useOfflineFallback?: boolean;
     timeout?: number;
 }
+export interface LongWeekend {
+    holiday: Holiday;
+    dates: string[];
+    dayCount: number;
+}
 export declare const VALID_TYPES: string[];
 export declare const VALID_CATEGORIES: string[];
 export declare const SUPPORTED_YEARS: any[];
@@ -63,6 +68,44 @@ export declare function isBankHoliday(dateStr: string): boolean;
  */
 export declare function isPoyaDay(dateStr: string): boolean;
 /**
+ * Check if a date (YYYY-MM-DD) is a business working day in Sri Lanka
+ * (Returns false for Saturdays, Sundays, and Public Holidays)
+ */
+export declare function isWorkingDay(dateStr: string): boolean;
+/**
+ * Get all holidays falling between two dates (inclusive)
+ */
+export declare function getHolidaysInRange(startDateStr: string, endDateStr: string, filters?: FilterOptions): Holiday[];
+/**
+ * Count total business working days between two dates (inclusive)
+ * (Excludes Saturdays, Sundays, and Sri Lankan Public Holidays)
+ */
+export declare function countWorkingDays(startDateStr: string, endDateStr: string): number;
+/**
+ * Find all long weekend opportunities for a target year (or all years if omitted)
+ */
+export declare function getLongWeekends(year?: number | string): LongWeekend[];
+/**
+ * Get all Buddhist holidays / Poya days for a year
+ */
+export declare function getBuddhistHolidays(year?: number | string): Holiday[];
+/**
+ * Get all Hindu holidays / festivals for a year
+ */
+export declare function getHinduHolidays(year?: number | string): Holiday[];
+/**
+ * Get all Islamic holidays for a year
+ */
+export declare function getIslamicHolidays(year?: number | string): Holiday[];
+/**
+ * Get all Christian holidays for a year
+ */
+export declare function getChristianHolidays(year?: number | string): Holiday[];
+/**
+ * Get all National holidays for a year
+ */
+export declare function getNationalHolidays(year?: number | string): Holiday[];
+/**
  * Get today's holiday(s) in Sri Lanka
  */
 export declare function getTodayHoliday(): Holiday[];
@@ -88,6 +131,14 @@ export declare function getNextPoyaDay(): (Holiday & {
     daysUntil: number;
 }) | null;
 /**
+ * Calculate days remaining until a target date (YYYY-MM-DD) from today in Sri Lanka
+ */
+export declare function getDaysUntil(dateStr: string): number;
+/**
+ * Lookup a specific holiday by exact ID string
+ */
+export declare function getHolidayById(id: string): Holiday | null;
+/**
  * Get holidays by tradition type (buddhist, hindu, islamic, christian, national)
  */
 export declare function getHolidaysByType(type: string): Holiday[];
@@ -111,6 +162,20 @@ export declare function getMetadata(): {
     endYear: number;
     types: string[];
     timezone: string;
+};
+/**
+ * Get dataset analytical breakdown statistics
+ */
+export declare function getDatasetStats(): {
+    totalHolidays: number;
+    supportedYears: any[];
+    startYear: any;
+    endYear: any;
+    publicCount: number;
+    bankCount: number;
+    poyaCount: number;
+    breakdownByReligion: Record<string, number>;
+    version: string;
 };
 /**
  * Async API Client to optionally query live REST API with automatic offline fallback
@@ -154,8 +219,20 @@ declare const _default: {
     isPublicHoliday: typeof isPublicHoliday;
     isBankHoliday: typeof isBankHoliday;
     isPoyaDay: typeof isPoyaDay;
+    isWorkingDay: typeof isWorkingDay;
+    getHolidaysInRange: typeof getHolidaysInRange;
+    countWorkingDays: typeof countWorkingDays;
+    getLongWeekends: typeof getLongWeekends;
+    getBuddhistHolidays: typeof getBuddhistHolidays;
+    getHinduHolidays: typeof getHinduHolidays;
+    getIslamicHolidays: typeof getIslamicHolidays;
+    getChristianHolidays: typeof getChristianHolidays;
+    getNationalHolidays: typeof getNationalHolidays;
+    getDaysUntil: typeof getDaysUntil;
+    getHolidayById: typeof getHolidayById;
     searchHolidays: typeof searchHolidays;
     getMetadata: typeof getMetadata;
+    getDatasetStats: typeof getDatasetStats;
     SriLankanHolidayAPI: typeof SriLankanHolidayAPI;
 };
 export default _default;

@@ -40,6 +40,13 @@ import {
   isPublicHoliday,
   isBankHoliday,
   isPoyaDay,
+  isWorkingDay,
+  getHolidaysInRange,
+  countWorkingDays,
+  getLongWeekends,
+  getBuddhistHolidays,
+  getDaysUntil,
+  getDatasetStats,
   searchHolidays,
   getMetadata
 } from '../../src/index';
@@ -85,6 +92,27 @@ export default function NpmModulePage() {
         case 'getNextPoyaDay':
           res = getNextPoyaDay();
           break;
+        case 'isWorkingDay':
+          res = { date: demoParam || '2026-04-13', isWorkingDay: isWorkingDay(demoParam || '2026-04-13') };
+          break;
+        case 'countWorkingDays':
+          res = { period: '2026-04-01 to 2026-04-30', workingDaysCount: countWorkingDays('2026-04-01', '2026-04-30') };
+          break;
+        case 'getLongWeekends':
+          res = getLongWeekends(demoParam || 2026);
+          break;
+        case 'getHolidaysInRange':
+          res = getHolidaysInRange('2026-04-01', '2026-04-30');
+          break;
+        case 'getBuddhistHolidays':
+          res = getBuddhistHolidays(demoParam || 2026);
+          break;
+        case 'getDaysUntil':
+          res = { targetDate: demoParam || '2026-12-25', daysUntil: getDaysUntil(demoParam || '2026-12-25') };
+          break;
+        case 'getDatasetStats':
+          res = getDatasetStats();
+          break;
         case 'getHolidaysByYear':
           res = getHolidaysByYear(demoParam || 2026);
           break;
@@ -95,7 +123,7 @@ export default function NpmModulePage() {
           res = getPoyaDays(demoParam || 2026);
           break;
         case 'isPublicHoliday':
-          res = isPublicHoliday(demoParam || '2026-04-13');
+          res = { date: demoParam || '2026-04-13', isPublicHoliday: isPublicHoliday(demoParam || '2026-04-13') };
           break;
         case 'searchHolidays':
           res = searchHolidays(demoParam || 'Sinhala');
@@ -410,6 +438,13 @@ export default function NpmModulePage() {
                     <option value="getUpcomingHoliday">getUpcomingHoliday() - Next Holiday</option>
                     <option value="getTodayHoliday">getTodayHoliday() - Today's Holiday</option>
                     <option value="getNextPoyaDay">getNextPoyaDay() - Next Poya + Countdown</option>
+                    <option value="isWorkingDay">isWorkingDay(dateStr) - Business Day Check</option>
+                    <option value="countWorkingDays">countWorkingDays(start, end) - Work Days Count</option>
+                    <option value="getLongWeekends">getLongWeekends(year) - Long Weekend Opportunities</option>
+                    <option value="getHolidaysInRange">getHolidaysInRange(start, end) - Date Range Query</option>
+                    <option value="getBuddhistHolidays">getBuddhistHolidays(year) - Poya & Buddhist Dates</option>
+                    <option value="getDaysUntil">getDaysUntil(dateStr) - Days Remaining Count</option>
+                    <option value="getDatasetStats">getDatasetStats() - Comprehensive Analytics</option>
                     <option value="getHolidaysByYear">getHolidaysByYear(year)</option>
                     <option value="getHolidaysByMonth">getHolidaysByMonth(year, month)</option>
                     <option value="getPoyaDays">getPoyaDays(year)</option>
@@ -420,19 +455,19 @@ export default function NpmModulePage() {
                 </div>
 
                 {/* Optional Parameter Input */}
-                {['getHolidaysByYear', 'getHolidaysByMonth', 'getPoyaDays', 'isPublicHoliday', 'searchHolidays'].includes(activeDemo) && (
+                {['getHolidaysByYear', 'getHolidaysByMonth', 'getPoyaDays', 'isPublicHoliday', 'searchHolidays', 'isWorkingDay', 'getLongWeekends', 'getBuddhistHolidays', 'getDaysUntil'].includes(activeDemo) && (
                   <div>
                     <label className="block text-xs font-mono text-gray-400 mb-2">
-                      {activeDemo === 'getHolidaysByYear' && 'Year Parameter (e.g. 2026):'}
+                      {['getHolidaysByYear', 'getPoyaDays', 'getLongWeekends', 'getBuddhistHolidays'].includes(activeDemo) && 'Year Parameter (e.g. 2026):'}
                       {activeDemo === 'getHolidaysByMonth' && 'Month (1-12):'}
-                      {activeDemo === 'getPoyaDays' && 'Year Parameter (e.g. 2026):'}
-                      {activeDemo === 'isPublicHoliday' && 'Date String (YYYY-MM-DD):'}
+                      {['isPublicHoliday', 'isWorkingDay', 'getDaysUntil'].includes(activeDemo) && 'Date String (YYYY-MM-DD):'}
                       {activeDemo === 'searchHolidays' && 'Search Query (e.g. Sinhala, Poya, Wesak):'}
                     </label>
                     <input
                       type="text"
                       placeholder={
-                        activeDemo === 'isPublicHoliday' ? '2026-04-13' :
+                        ['isPublicHoliday', 'isWorkingDay'].includes(activeDemo) ? '2026-04-13' :
+                        activeDemo === 'getDaysUntil' ? '2026-12-25' :
                         activeDemo === 'searchHolidays' ? 'Sinhala' : '2026'
                       }
                       value={demoParam}

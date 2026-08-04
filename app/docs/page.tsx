@@ -33,7 +33,8 @@ import {
   Info,
   Sliders,
   Flame,
-  Package
+  Package,
+  History
 } from 'lucide-react';
 
 interface EndpointParam {
