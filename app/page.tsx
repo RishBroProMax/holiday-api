@@ -39,7 +39,8 @@ import {
   Sun,
   Moon,
   History,
-  Feather
+  Feather,
+  Package
 } from 'lucide-react';
 import holidayData from '../data/holidays.json';
 
@@ -462,6 +463,14 @@ print(data);`;
               <a href="#code" className="text-gray-400 hover:text-white transition hover:scale-105">Code</a>
 
               <Link
+                href="/npm-module"
+                className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl transition hover:bg-emerald-500/20 shadow-sm"
+              >
+                <Package className="w-4 h-4" />
+                <span>NPM Package</span>
+              </Link>
+
+              <Link
                 href="/docs"
                 className="flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold bg-amber-500/10 border border-amber-500/30 px-3.5 py-2 rounded-xl transition hover:bg-amber-500/20 shadow-sm"
               >
@@ -553,6 +562,14 @@ print(data);`;
                 </a>
 
                 <div className="pt-4 border-t border-[#1A2333] flex flex-col gap-3">
+                  <Link
+                    href="/npm-module"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-3 rounded-xl text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center gap-2"
+                  >
+                    <Package className="w-4 h-4" />
+                    <span>NPM Package (/npm-module)</span>
+                  </Link>
                   <Link
                     href="/docs"
                     onClick={() => setMobileMenuOpen(false)}

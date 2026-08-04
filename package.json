@@ -1,23 +1,42 @@
 {
   "name": "sri-lankan-holiday-api",
-  "version": "2.5.0",
-  "description": "A public REST API & Web Dashboard serving Sri Lankan public holidays (2024-2045) built with Next.js.",
-  "main": "app/page.tsx",
+  "version": "3.0.0",
+  "description": "Official Node.js module & REST API for Sri Lankan public, bank & Poya holidays (2024-2045). Zero-dependency, 100% offline-ready TypeScript/JavaScript SDK.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/build-npm.js && next build",
+    "build:npm": "node scripts/build-npm.js",
     "start": "next start",
     "generate": "node scripts/generate-holidays.js"
   },
   "keywords": [
     "sri-lanka",
+    "sri-lankan-holiday-api",
     "holidays",
     "api",
     "poya",
     "public-holidays",
+    "bank-holidays",
     "rest-api",
     "nextjs",
-    "vercel"
+    "sdk",
+    "node-module",
+    "offline-ready"
   ],
   "author": "RishBroProMax",
   "license": "MIT",
