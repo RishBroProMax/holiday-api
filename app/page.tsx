@@ -48,6 +48,7 @@ import holidayData from '../data/holidays.json';
 export default function HomePage() {
   // Navigation Menu Mobile Toggle
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isBugModalOpen, setIsBugModalOpen] = useState(false);
 
   // View Mode for Explorer (Grid vs List)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -468,6 +469,13 @@ print(data);`;
                 <History className="w-3.5 h-3.5 text-rose-400" />
                 <span>Changelog</span>
               </Link>
+              <button
+                onClick={() => setIsBugModalOpen(true)}
+                className="text-gray-400 hover:text-rose-400 transition flex items-center gap-1.5 font-semibold text-xs"
+              >
+                <Bug className="w-3.5 h-3.5 text-rose-400" />
+                <span>Report Bug</span>
+              </button>
 
               <div className="h-4 w-px bg-[#1F293D] mx-1" />
 
@@ -1222,11 +1230,16 @@ print(data);`;
             <div className="flex flex-wrap items-center justify-center gap-6">
               <a href="https://imrishmika.dev" target="_blank" rel="noreferrer" className="hover:text-white transition font-medium">imrishmika.dev</a>
               <Link href="/docs" className="text-amber-400 hover:underline font-bold">API Docs (/docs)</Link>
+              <button onClick={() => setIsBugModalOpen(true)} className="text-rose-400 hover:underline font-bold flex items-center gap-1">
+                <Bug className="w-3.5 h-3.5" /> Report Bug
+              </button>
               <a href="https://github.com/RishBroProMax/holiday-api" target="_blank" rel="noreferrer" className="hover:text-white transition">GitHub Repo</a>
             </div>
           </div>
         </footer>
 
+        {/* Bug Report Modal */}
+        <BugReportModal isOpen={isBugModalOpen} onClose={() => setIsBugModalOpen(false)} />
       </div>
     </div>
   );
