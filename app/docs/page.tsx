@@ -32,7 +32,8 @@ import {
   Cpu,
   Info,
   Sliders,
-  Flame
+  Flame,
+  Package
 } from 'lucide-react';
 
 interface EndpointParam {

@@ -36,11 +36,38 @@ interface ReleaseNote {
 
 const changelogData: ReleaseNote[] = [
   {
+    version: 'v3.0.0 (Official Node.js Module Launch)',
+    tag: 'v3.0.0',
+    date: 'August 04, 2026',
+    badge: 'Latest',
+    badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+    summary: 'Official release of the zero-dependency, 100% offline-ready sri-lankan-holiday-api Node.js module on NPM with TypeScript typings, CJS/ESM dual builds, Vercel build pipeline integration, and dedicated /npm-module interactive documentation route.',
+    changes: [
+      {
+        category: 'Features',
+        items: [
+          'Published official Node.js SDK (sri-lankan-holiday-api) supporting zero-network offline query execution.',
+          'Bundled complete 858+ hand-verified Sri Lanka public, bank & Poya holiday dataset (2024–2045) inside the package.',
+          'Added dual CommonJS (require) and ES Module (import) exports with full TypeScript declaration types.',
+          'Added SriLankanHolidayAPI hybrid client class supporting live remote REST API calls with automatic offline fallback.',
+          'Created interactive web documentation route at /npm-module featuring live in-browser method sandbox tester.'
+        ]
+      },
+      {
+        category: 'Documentation',
+        items: [
+          'Launched dedicated NPM Package documentation page at /npm-module with copyable install scripts (npm, yarn, pnpm, bun) & code snippets.',
+          'Added NPM Package navigation links across main header navbar, mobile menu drawer, and footer.'
+        ]
+      }
+    ]
+  },
+  {
     version: 'v3.0.0-Beta (API v2)',
     tag: 'v3.0.0-beta',
     date: 'August 03, 2026',
-    badge: 'Latest',
-    badgeColor: 'bg-rose-500/20 text-rose-400 border-rose-500/30',
+    badge: 'Stable',
+    badgeColor: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
     summary: 'Major release featuring 100% hand-researched Sri Lankan Government Gazette dataset, new API v2 endpoint suite with full-text search, pagination, multi-upcoming limit support, and dataset analytics.',
     changes: [
       {
@@ -171,6 +198,9 @@ export default function ChangelogPage() {
               </Link>
               <Link href="/docs" className="text-gray-400 hover:text-white transition">
                 Docs
+              </Link>
+              <Link href="/npm-module" className="text-gray-400 hover:text-white transition">
+                NPM Package
               </Link>
               <Link href="/changelog" className="text-amber-400 font-bold border-b-2 border-amber-400 pb-0.5">
                 Changelog
