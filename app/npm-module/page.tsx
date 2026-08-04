@@ -383,7 +383,7 @@ export default function NpmModulePage() {
               </div>
               <h3 className="text-lg font-bold text-white">Poya Day & Gazette Verified</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Contains hand-researched official Sri Lanka Gazette dates (2024–2030) and astronomical Full Moon Poya algorithms up to 2045.
+                Contains hand-researched official Sri Lanka Gazette dates (2024–2035) and astronomical Full Moon Poya algorithms up to 2045.
               </p>
             </div>
 
