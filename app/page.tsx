@@ -39,9 +39,10 @@ import {
   Sun,
   Moon,
   History,
-  Feather,
+  Bug,
   Package
 } from 'lucide-react';
+import BugReportModal from '../components/BugReportModal';
 import holidayData from '../data/holidays.json';
 
 export default function HomePage() {
